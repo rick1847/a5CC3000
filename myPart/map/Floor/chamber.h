@@ -8,6 +8,7 @@
 
 class Item;
 class EnemyRace;
+class PlayerRace;
 class Item;
 class TextDisplay;
 
@@ -40,8 +41,11 @@ class Chamber{
 	
 	bool ValidMove(Coordinates coord);
 	
+	void react(PlayerRace *player);
+	void notifyItem(Coordinates nextPos, PlayerRace *player);
 	bool moveEnemies();
 	
+	void setOccupy(Coordinates pos, bool toWhat);
 	
 	void bloom();
 	void printChamber();

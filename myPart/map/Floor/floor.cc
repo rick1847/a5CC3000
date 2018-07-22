@@ -136,6 +136,17 @@ void Floor::NotifyGold(Coordinates coord){
 	}
 }
 
+void Floor::react(PlayerRace *player){
+	for(auto i : chambers){
+		i->react(player);
+	}
+}
+
+void Floor::notifyItem(Coordinates nextPos, PlayerRace *player){
+	for(auto i : chambers){
+		i->notifyItem(nextPos, player);
+	}
+}
 
 void Floor::moveEnemies(){
 	for(auto i : chambers){
@@ -157,7 +168,7 @@ bool Floor::ValidMove(Coordinates coord){
 	
 	int a = 0;
 	for (auto chamber : chambers){
-		
+		//cout<<"asfd"<<a<<"\n";
 		if(chamber->ValidMove(coord)){
 			
 			//cout<<"asfd"<<a<<"\n";
@@ -185,8 +196,6 @@ void Floor::notifyChamber(){
 	}
 	
 	for(auto i : passages){
-		i->setChar('a');
-		
 		td->notify(*i);
 	}
 }

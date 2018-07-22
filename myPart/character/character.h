@@ -20,6 +20,7 @@ class EnemyRace: public Subject{
 	
 	
 	public:
+	void react(PlayerRace *player);
 	EnemyRace(Observer *td, Coordinates coords);
-	void move();
+	Coordinates move();
 };

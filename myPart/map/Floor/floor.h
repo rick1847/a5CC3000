@@ -13,6 +13,7 @@
 
 class Item;
 class EnemyRace;
+class PlayerRace;
 
 
 class Floor: public Observer{
@@ -33,7 +34,7 @@ class Floor: public Observer{
 	
 	void genPotionLoc();
 	void genGoldLoc();
-	void genMonsterLoc(); 
+	void genMonsterLoc();
 
 	Coordinates spawnLoc;
 	Coordinates nextFloorLoc;
@@ -43,6 +44,8 @@ class Floor: public Observer{
 	
 	Floor(std::vector<std::string> plan, TextDisplay *td, bool whatGen);
 	
+	void react(PlayerRace *player);
+	void notifyItem(Coordinates nextPos, PlayerRace *player);
 	void print();
 	void notify(Subject &whoFrom) override;
 	void genFloor();

@@ -147,6 +147,26 @@ void Chamber::readEntities(std::vector<std::string> plan){
 	
 }
 
+void Chamber::notifyItem(Coordinates nextPos, PlayerRace *player){
+	items.erase(remove_if(items.begin(), items.end(), 
+		[&](Item *item){
+			return item->getPos() == nextPos;
+		}), items.end());
+		
+	for (auto cell : cells){
+		if(cell->getPos() == nextPos){
+			cell->setOccupy(false);
+			break;
+		}
+	}
+	/*for(auto i = items.begin(): i != items.end(); ++i){
+		if((*i)->getPos() == nextPos){
+			delete i;
+			break
+		}
+	}*/
+}
+
 void Chamber::printChamber(){
 	for(int i = 0; i < 30; ++i){
 		for(auto cell : cells){
@@ -237,17 +257,49 @@ void Chamber::deleteItem(Item *which){
 }
 
 bool Chamber::ValidMove(Coordinates coord){
+	
+	Cell *candCell = nullptr;
+	for(auto cell : cells){
+		//cout<<"asdfasdfasdf"<<endl;
+		if(cell->getPos() == coord){
+			candCell = cell;
+		}
+	}
+	/*
 	bool test = cells.end() == find_if(cells.begin(), cells.end(), 
 		[&coord](Cell *inCell)
 			{return inCell->getPos().x == coord.x && inCell->getPos().y == coord.y; });
+	*/
 	
-	return !test;
+	if(candCell) return !(candCell->getOccupy());
+	
+	else return false;
 	
 }
 
+void Chamber::setOccupy(Coordinates pos, bool toWhat){
+	for(auto i : cells){
+		if(i->getPos() == pos){ 
+			i->setOccupy(toWhat);
+			return;
+		}
+	}
+}
+void Chamber::react(PlayerRace *player){
+	for(auto i : enemies){
+		i->react(player);
+	}
+}
 bool Chamber::moveEnemies(){
 	
 	for(auto i : enemies) {
+		Coordinates nextPos = i->move();
+		
+		if(ValidMove(nextPos)) {
+			setOccupy(i->getPos(), false);
+			i->setPos(nextPos);
+			setOccupy(i->getPos(), true);
+		}
 		i->notifyObservers();
 		
 	}

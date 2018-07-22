@@ -1,0 +1,9 @@
+#ideally this should work
+
+git init
+#git remote add origin RepoURL
+#git remote -v
+git pull origin master
+git add .
+git commit -m "your message here"
+git push origin master

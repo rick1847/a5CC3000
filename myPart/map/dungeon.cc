@@ -55,12 +55,10 @@ Dungeon::Dungeon(ifstream &mapFile, bool whatGen){
 	
 	currentFloor = new Floor(FloorMaps.at(0), td, whatGen);
 	
-//	player = new PlayerRace(td, currentFloor->getRandCoords());
+	player = new PlayerRace(td, currentFloor->getRandCoords());
 	
-//	player->notifyObservers();
+	player->notifyObservers();
 
-	player = new PlayerRace(td, currentFloor->genPlayerLoc());
-	
 	nextFloorLoc = currentFloor->genNextFloorLoc();
 	
 	currentFloor->genFloor();
@@ -74,7 +72,7 @@ void Dungeon::play(){
 	int i = 0;
 	
 	int moveTile;
-	char cmd = '1';
+	char cmd = 0;
 	
 	currentFloor->moveEnemies();
 	currentFloor->NotifyItems();
@@ -82,38 +80,86 @@ void Dungeon::play(){
 	
 	while(cmd != 'q'){
 		
+		currentFloor->notifyChamber();
+		currentFloor->moveEnemies();
+		currentFloor->NotifyItems();
+		player->notifyObservers();
+		
+		currentFloor->print();
+		std::cout<<"("<<player->getPos().x << " "<< player->getPos().y<<")\t";
+		std::cout<<"("<<nextFloorLoc.x << " "<< nextFloorLoc.y<<")\n";
+		cout<<"nextCommand: ";
+		cin>>cmd;
+		
 		if(cmd == 'm'){
-				cin>>cmd;
-				Coordinates curPos = player->getPos();
-				Coordinates nextPos = player->getPos();
+			cin>>cmd;
+			Coordinates curPos = player->getPos();
+			Coordinates nextPos = player->getPos();
+			
+			if(cmd == 'n'){
+				nextPos.x = nextPos.x - 1;
 				
-				if(cmd == 'n'){
-					nextPos.x = nextPos.x - 1;
-					
-				}
-				if(cmd == 's'){
-					nextPos.x = nextPos.x + 1;
-					
-				}
-				if(cmd == 'e'){
-					nextPos.y = nextPos.y - 1;
-					
-				}
-				if(cmd == 'w'){
-					nextPos.y = nextPos.y + 1;
-					
-				}
+			}
+			if(cmd == 's'){
+				nextPos.x = nextPos.x + 1;
 				
-				//std::cout<<"("<<nextPos.x << " "<< nextPos.y<<")"<<currentFloor->ValidMove(nextPos)<<"\n";
-				if(currentFloor->ValidMove(nextPos)){
-					player->move(nextPos);
-					
-					td->notify(*player);
-				}
+			}
+			if(cmd == 'e'){
+				nextPos.y = nextPos.y - 1;
 				
+			}
+			if(cmd == 'w'){
+				nextPos.y = nextPos.y + 1;
 				
+			}
+			
+			//std::cout<<"("<<nextPos.x << " "<< nextPos.y<<")"<<currentFloor->ValidMove(nextPos)<<"\n";
+			if(currentFloor->ValidMove(nextPos)){
+				player->move(nextPos);
+				
+				td->notify(*player);
+			}
+			
+			if(nextPos == nextFloorLoc){
+				if(level == 5) victory();
+				
+				else nextFloor();
+			}
+			
+			std::cout<<"("<<player->getPos().x << " "<< player->getPos().y<<")|\t|";
+			std::cout<<"("<<nextPos.x << " "<< nextPos.y<<")\n";
+			
+			currentFloor->react(player);
 		}
-		else if(cmd == 'p'){ 
+		
+		else if(cmd == 'p'){
+			cin>>cmd;
+			
+			Coordinates curPos = player->getPos();
+			Coordinates nextPos = player->getPos();
+			
+			if(cmd == 'n'){
+				nextPos.x = nextPos.x - 1;
+				
+			}
+			if(cmd == 's'){
+				nextPos.x = nextPos.x + 1;
+				
+			}
+			if(cmd == 'e'){
+				nextPos.y = nextPos.y - 1;
+				
+			}
+			if(cmd == 'w'){
+				nextPos.y = nextPos.y + 1;
+					
+			}
+			
+			currentFloor->notifyItem(nextPos, player);
+		}
+		
+		cmd = 0;
+		/*else if(cmd == 'p'){ 
 			//player->notifyObservers();
 			currentFloor->print();
 			std::cout<<"("<<player->getPos().x << " "<< player->getPos().y<<")\n";
@@ -122,15 +168,16 @@ void Dungeon::play(){
 		
 		else if(cmd == 'n') nextFloor();
 		
-		else if(cmd == 'c') currentFloor->notifyChamber();
+		//else if(cmd == 'c') currentFloor->notifyChamber();
 		
 		else if(cmd == 'd'){
 			int i;
 			cin>>i;
 			currentFloor->printChamber(i);
-		}
-		cout<<"nextCommand: ";
-		cin>>cmd;
+		}*/
+		
+		
+		//system("clear");
 	}
 }
 
@@ -146,12 +193,18 @@ void Dungeon::nextFloor(){
 	delete currentFloor;
 	currentFloor = new Floor(FloorMaps.at(level), td, randGen);
 	
+	player->move(currentFloor->genPlayerLoc());
+	
+	nextFloorLoc = currentFloor->genNextFloorLoc();
+	
+	currentFloor->genFloor();
+	
 	td->load(FloorMaps.at(level));
 	++level;
 }
 
 void Dungeon::victory(){
-	
+	throw "victory";
 }
 
 void Dungeon::reset(){
