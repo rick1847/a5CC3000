@@ -6,6 +6,7 @@
 class Vampire : public PlayerRace {
 public:
 	Vampire(Coordinate &p, Cell &c);
+	//param is itself
 	virtual void specialEffect(Vampire &to) override;
 };
 

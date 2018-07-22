@@ -6,6 +6,7 @@
 class Troll : public PlayerRace {
 public:
 	Troll(Coordinate &p, Cell &c);
+	//param is itself
 	virtual void specialEffect(Character &to) override;
 };
 

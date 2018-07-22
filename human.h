@@ -6,6 +6,7 @@
 class Human : public EnemyRace {
 public:
 	Human(Coordinate &p, Cell &c);
+	//drop a second gold pile on death
 	void specialEffect(Character &to) override;
 	char getAvatar() override;
 };

@@ -8,6 +8,10 @@ int DragonHoard::getAmount() {
 	return amount;
 }
 
+void DragonHoard::addGuardian(Dragon &d) {
+	guardian = &d;
+}
+
 void DragonHoard::notifyDeath() {
 	guardian = nullptr;
 }

@@ -1,6 +1,9 @@
 #include "wounddef.h"
 
 
+WoundDEF::WoundDEF(Coordinate &p, Cell &c) : Potion(p, c)
+{}
+
 bool WoundDEF::isKnown() {
 	return known;
 }

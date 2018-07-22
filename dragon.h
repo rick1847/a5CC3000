@@ -5,11 +5,13 @@
 
 
 class Dragon : public EnemyRace {
+	//assign each dragon a special gold stash
 	DragonHoard *stash;
 public:
 	Dragon(Coordinate &p, Cell &c, DragonHoard &dh);
-	~Dragon();
 	char getAvatar() override;
+	//this should do nothing
+	void move() override;
 };
 
 

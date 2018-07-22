@@ -1,5 +1,4 @@
 #include "character.h"
-#include <math.h>
 
 
 
@@ -55,8 +54,4 @@ Stats &Character::getBaseStats() {
 void Character::changeStats(Stats &newS) {
 	delete stats;
 	stats = &newS;
-}
-
-void Character::die() {
-
 }

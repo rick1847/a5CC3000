@@ -6,7 +6,3 @@ EnemyRace::EnemyRace(Stats &s, Stats &bs, Coordinate &p, Cell &c) : Character(s,
 
 EnemyRace::~EnemyRace() {
 }
-
-void EnemyRace::move() {
-
-}

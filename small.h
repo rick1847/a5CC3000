@@ -8,6 +8,7 @@ class Small : public Treasure {
 public:
 	Small(Coordinate &p, Cell &c);
 	static int getAmount();
+	//give gold to player
 	void myEffect(PlayerRace &pl) override;
 	std::string giveType() override;
 };

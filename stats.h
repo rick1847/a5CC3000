@@ -1,6 +1,6 @@
 #ifndef STATS_H
 #define STATS_H
-
+//combat, items will change affect characters by affecting values of this object
 
 const int minHP = 0;
 const int minATK = 0;

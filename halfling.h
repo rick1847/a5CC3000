@@ -6,6 +6,7 @@
 class Halfling : public EnemyRace {
 public:
 	Halfling(Coordinate &p, Cell &c);
+	//implement 50% chance to miss
 	void takeHit(Character &from) override;
 	char getAvatar() override;
 };

@@ -18,3 +18,8 @@ void Elf::specialEffect(Character &to) {
 char Elf::getAvatar() {
 	return 'E';
 }
+
+void Elf::attack(Character &who) {
+	who.takeHit(*this);
+	specialEffect(who);
+}

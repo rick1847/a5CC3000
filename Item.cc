@@ -13,6 +13,10 @@ void Item::myEffect(PlayerRace &pl) {
 	(void)pl;
 }
 
+std::string Item::giveType() {
+	return "a thing";
+}
+
 char Item::getAvatar() {
 	return '.';
 }
