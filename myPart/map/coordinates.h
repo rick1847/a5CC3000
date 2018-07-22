@@ -6,6 +6,10 @@
 
 struct Coordinates{
 	size_t x, y;
+
+	bool operator==(const Coordinates &other){
+		return x == other.x && y == other.y;
+	}
 };
 
 

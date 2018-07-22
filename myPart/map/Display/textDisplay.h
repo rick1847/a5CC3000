@@ -14,6 +14,7 @@ class TextDisplay: public Observer{
 	TextDisplay(std::vector<std::string> newDisplay);
 	void print();
 	void notify(Subject &fromWho) override;
+	void load(std::vector<std::string> newDisplay);
 }; 
 
 #endif

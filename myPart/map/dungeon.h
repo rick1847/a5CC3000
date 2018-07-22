@@ -13,10 +13,12 @@ class TextDisplay;
 class PlayerRace;
 
 class Dungeon{
+	bool randGen;
 	TextDisplay *td;
 	std::vector<std::vector<std::string>> FloorMaps;
 	
 	Floor *currentFloor;
+	Coordinates nextFloorLoc;
 	PlayerRace *player;
 	std::string playerType;
 	int level;
@@ -24,7 +26,7 @@ class Dungeon{
 	void setup();
 	
 	public:
-	Dungeon(std::ifstream &mapFile);
+	Dungeon(std::ifstream &mapFile, bool whatGen);
 	
 	void play();	
 	void print();

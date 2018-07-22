@@ -31,13 +31,26 @@ void Cell::deleteItem(Item *item){
 }
 
 void Cell::notify(Subject &fromWho){
-	if(dispChar < 57){
-		++dispChar;
-		notifyObservers();
+	if(dispChar != '.'){
+	//	notifyObservers();
 	}
+	//if(dispChar != 'b'){
+	//	dispChar = 'b';
+	//	notifyObservers();
+	//}
 }
 
+void Cell::setChar(char a){
+	dispChar = a;
+	notifyObservers();
+}
 
+void Cell::setOccupy(bool toWhat){
+	occupied = toWhat;
+}
 
+bool Cell::getOccupy(){
+	return occupied;
+}
 
 

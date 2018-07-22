@@ -17,3 +17,7 @@ Coordinates Subject::getPos(){
 char Subject::getDispChar(){
 	return dispChar;
 }
+
+void Subject::setPos(Coordinates coords){
+	position = coords;
+}

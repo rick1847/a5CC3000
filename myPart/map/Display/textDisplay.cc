@@ -15,7 +15,20 @@ void TextDisplay::print(){
 
 void TextDisplay::notify(Subject &fromWho){
 	Coordinates where = fromWho.getPos();
-
-	display.at(where.x)[where.y] = fromWho.getDispChar();
 	
+	
+	display.at(where.x)[where.y] = fromWho.getDispChar();
+	//cout<<fromWho.getDispChar()<<endl;
+	
+/*	if(where.x == 3 && where.y == 3){
+		cout<<"asdfasdf"<<display.at(where.x)[where.y]<<endl;
+	}
+	
+	print();
+	cout<<endl;*/
+	
+}
+
+void TextDisplay::load(vector<string> newDisplay){
+	display = newDisplay;
 }

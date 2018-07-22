@@ -16,8 +16,12 @@ class EnemyRace;
 
 
 class Floor: public Observer{
+	
+	bool randGen;
+	
 	const int maxEnemies = 20;
 	const int maxPotions = 10;
+	const int maxTreasure = 10;
 	std::vector<Cell*> passages;
 	std::vector<Item*> items;
 	std::vector<EnemyRace*> enemies;
@@ -25,15 +29,19 @@ class Floor: public Observer{
 
 	TextDisplay *td;
 	
+	int spawnRoom = 0;
+	
 	void genPotionLoc();
 	void genGoldLoc();
-	void genNextFloorLoc();
-	void genPlayerLoc();
 	void genMonsterLoc(); 
 
+	Coordinates spawnLoc;
+	Coordinates nextFloorLoc;
+	
+	void readEntities(std::vector<std::string> plan);
 	public:
 	
-	Floor(std::vector<std::string> plan);
+	Floor(std::vector<std::string> plan, TextDisplay *td, bool whatGen);
 	
 	void print();
 	void notify(Subject &whoFrom) override;
@@ -43,11 +51,16 @@ class Floor: public Observer{
 	void deleteItem(Item *which);
 	void NotifyCell(Coordinates coord);
 	void NotifyGold(Coordinates coord);
+	void NotifyItems();
 	bool ValidMove(Coordinates coord);
 	Coordinates getRandCoords();
 	
 	void printChamber(int i);
 	void notifyChamber();
+	
+	
+	Coordinates genNextFloorLoc();
+	Coordinates genPlayerLoc();
 
 };
 

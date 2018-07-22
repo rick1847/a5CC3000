@@ -8,25 +8,33 @@
 
 class Item;
 class EnemyRace;
+class Item;
 class TextDisplay;
 
 class Chamber{
+	bool randGen;
+	
 	std::vector<Cell*> cells;
+	std::vector<Item*> items;
 	std::vector<EnemyRace*> enemies;
 	
+	TextDisplay *myTd;
 
-	void genPotionLoc();
-	void genGoldLoc();
-	void genNextFloorLoc();
-	void genPlayerLoc();
-	void genMonsterLoc();
 	
-
+	
+	Coordinates genLoc(char whatChar);
 	public:
 	
-	Chamber(TextDisplay *td, std::vector<std::string> plan, Coordinates coord);
+	void genPotionLoc();
+	void genGoldLoc();
+	void genMonsterLoc();
+	
+	Chamber(TextDisplay *td, std::vector<std::string> plan, Coordinates coord, bool whatGen);
 	
 	void genChamber();
+	Coordinates genPlayerLoc();
+	Coordinates genNextFloorLoc();
+	
 	bool InChamber(Coordinates coord);
 	void deleteItem(Item *which);
 	
@@ -37,6 +45,8 @@ class Chamber{
 	
 	void bloom();
 	void printChamber();
+	void notifyItems();
+	void readEntities(std::vector<std::string> plan);
 
 };
 

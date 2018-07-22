@@ -5,18 +5,18 @@
 class Observer;
 
 class Subject {
-	std::vector<Observer*> observers;
-	
-	protected:
-	const Coordinates position;
-	char dispChar;
 	
 	public:
+	std::vector<Observer*> observers;
+	Coordinates position;
+	char dispChar;
+
 	void addObserver(Observer *who);  
 	void notifyObservers();
 	Coordinates getPos();
 	explicit Subject(Coordinates coords);
 	
+	void setPos(Coordinates coords);
 	char getDispChar();
 };
 
