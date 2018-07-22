@@ -8,9 +8,11 @@ class DragonHoard : public Treasure {
 	static const int amount = 6;
 	Dragon *guardian;
 public:
+	DragonHoard(Coordinate &p, Cell &c);
 	static int getAmount();
 	void notifyDeath();
-	void giveTreasure(PlayerRace &pl) override;
+	void myEffect(PlayerRace &pl) override;
+	std::string giveType() override;
 };
 
 

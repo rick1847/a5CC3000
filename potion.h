@@ -9,7 +9,6 @@ public:
 	Potion(Coordinate &p, Cell &c);
 	virtual ~Potion() = 0;
 	char getAvatar() override;
-	std::string giveType() override;
 };
 
 

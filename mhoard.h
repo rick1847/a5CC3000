@@ -6,8 +6,10 @@
 class MerchHoard : public Treasure {
 	static const int amount = 4;
 public:
+	MerchHoard(Coordinate &p, Cell &c);
 	static int getAmount();
-	void giveTreasure(PlayerRace &pl) override;
+	void myEffect(PlayerRace &pl) override;
+	std::string giveType() override;
 };
 
 

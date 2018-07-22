@@ -6,6 +6,7 @@
 class BoostATK : public Potion {
 	static bool known;
 public:
+	BoostATK(Coordinate &p, Cell &c);
 	static bool isKnown();
 	static void becomeKnown();
 	void myEffect(PlayerRace &pl) override;

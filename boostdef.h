@@ -1,12 +1,12 @@
-#ifndef RHEALTH_H
-#define RHEALTH_H
+#ifndef BDEF_H
+#define BDEF_H
 #include "potion.h"
 
 
-class RestoreHealth : public Potion {
+class BoostDEF : public Potion {
 	static bool known;
 public:
-	RestoreHealth(Coordinate &p, Cell &c);
+	BoostDEF(Coordinate &p, Cell &c);
 	static bool isKnown();
 	static void becomeKnown();
 	void myEffect(PlayerRace &pl) override;

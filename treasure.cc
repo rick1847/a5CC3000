@@ -7,6 +7,6 @@ Treasure::Treasure(Coordinate &p, Cell &c) : Item(p, c)
 Treasure::~Treasure() {
 }
 
-void Treasure::giveTreasure(PlayerRace &pl) {
-	(void)pl;
+char Treasure::getAvatar() {
+	return 'G';
 }

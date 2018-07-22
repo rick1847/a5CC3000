@@ -1,12 +1,12 @@
-#ifndef RHEALTH_H
-#define RHEALTH_H
+#ifndef WATK_H
+#define WATK_H
 #include "potion.h"
 
 
-class RestoreHealth : public Potion {
+class WoundATK : public Potion {
 	static bool known;
 public:
-	RestoreHealth(Coordinate &p, Cell &c);
+	WoundATK(Coordinate &p, Cell &c);
 	static bool isKnown();
 	static void becomeKnown();
 	void myEffect(PlayerRace &pl) override;

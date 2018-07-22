@@ -1,6 +1,9 @@
 #include "restorehealth.h"
 
 
+RestoreHealth::RestoreHealth(Coordinate &p, Cell &c) : Potion(p, c)
+{}
+
 bool RestoreHealth::isKnown() {
 	return known;
 }

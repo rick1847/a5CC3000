@@ -1,6 +1,9 @@
 #include "poisonhealth.h"
 
 
+PoisonHealth::PoisonHealth(Coordinate &p, Cell &c) : Potion(p, c)
+{}
+
 bool PoisonHealth::isKnown() {
 	return known;
 }

@@ -12,3 +12,7 @@ Item::~Item(){
 void Item::myEffect(PlayerRace &pl) {
 	(void)pl;
 }
+
+char Item::getAvatar() {
+	return '.';
+}

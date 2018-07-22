@@ -1,6 +1,9 @@
 #include "boostatk.h"
 
 
+BoostATK::BoostATK(Coordinate &p, Cell &c) : Potion(p, c)
+{}
+
 bool BoostATK::isKnown() {
 	return known;
 }

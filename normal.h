@@ -6,8 +6,10 @@
 class Normal : public Treasure {
 	static const int amount = 2;
 public:
+	Normal(Coordinate &p, Cell &c);
 	static int getAmount();
-	void giveTreasure(PlayerRace &pl) override;
+	void myEffect(PlayerRace &pl) override;
+	std::string giveType() override;
 };
 
 
