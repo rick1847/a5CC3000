@@ -13,7 +13,7 @@ class Stats {
 	int maxHP;
 	int gold;
 public:
-	Stats(int hp = 125, int mhp = 125, int a = 25, int d = 25);
+	Stats(int hp, int mhp, int a, int d);
 	Stats(Stats &s);
 	int getHP();
 	int getMaxHP();

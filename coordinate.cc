@@ -11,3 +11,7 @@ int Coordinate::getX() {
 int Coordinate::getY() {
 	return Y;
 }
+
+bool Coordinate::operator==(Coordinate other){
+	return X == other.getX() && Y == other.getY();
+}

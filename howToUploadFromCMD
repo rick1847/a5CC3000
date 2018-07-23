@@ -5,5 +5,5 @@ git init
 #git remote -v
 git pull origin master
 git add .
-git commit -m "first commit after integration"
+git commit -m "Display Items Done"
 git push origin master

@@ -1,0 +1,1 @@
+g++ -std=c++14 main.cc dungeon.cc map/Cell/cell.cc display/textDisplay.cc map/Floor/floor.cc map/Floor/chamber.cc subject.cc character/character.cc item/item.cc 
