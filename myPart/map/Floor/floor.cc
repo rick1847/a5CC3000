@@ -2,42 +2,130 @@
 
 #include<iostream>
 #include<stdlib.h>
-
-std::ostream &operator<<(std::ostream &out, Coordinates &coord){
-	out<<"("<<coord.x<<" "<<coord.y<<")";
+#include<algorithm>
+std::ostream &operator<<(std::ostream &out, Coordinate &coord){
+	out<<"("<<coord.X<<" "<<coord.Y<<")";
 
 	return out;
 }
 
 using namespace std;
+
+bool oneTileAway(Coordinate obj1, Coordinate obj2){
+	int diffX = obj1.X - obj2.X;
+	int diffY = obj1.Y - obj2.Y;
+	
+	diffX = abs(diffX);
+	diffY = abs(diffY);
+	
+	return diffX <= 1 && diffY <= 1 && !(diffX == 0 && diffY == 0);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+bool invalidTile(char test){return (test == ' ' || test == '|' || test == '-' || test == '#' || test == '+'); }
+
+bool detAddCoord(vector<Coordinate*> &chamberCoords, vector<string> plan, int xOff, int yOff, Coordinate *i){
+	if(!invalidTile(plan.at(i->X + xOff)[i->Y + yOff])){
+		if(chamberCoords.end() == find_if(chamberCoords.begin(), chamberCoords.end(), 
+			[&](Coordinate *inCoord){return inCoord->X == i->X + xOff && inCoord->Y == i->Y + yOff; })){
+				
+			chamberCoords.emplace_back(new Coordinate{i->X + xOff, i->Y + yOff});
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+//gives the cells in a chamber
+bool reqCellsInChamber(Coordinate *coord, vector<string> plan, vector<Coordinate*> &chamberCoords){
+	
+	
+	chamberCoords.emplace_back(coord);
+	
+	bool newTile = true;
+	
+	while(newTile){
+		newTile = false;
+		
+		for (auto i : chamberCoords){
+		//	cout<<"I am error"<<endl;
+			newTile = detAddCoord(chamberCoords, plan, 1, 0, i) || newTile;
+			newTile = detAddCoord(chamberCoords, plan, 0, 1, i) || newTile;
+			newTile = detAddCoord(chamberCoords, plan, -1, 0, i) || newTile;
+			newTile = detAddCoord(chamberCoords, plan, 0, -1, i) || newTile;
+		}
+	}
+}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 Floor::Floor(std::vector<std::string> plan, TextDisplay *newDisp, bool whatGen):td{newDisp},randGen{whatGen}{
 	
 	
-	size_t i = 0;
-	
+	int i = 0;
+	//make cells
 	for(auto row : plan){
-		for(size_t j = 0; row[j]; ++j){
-			if(row[j] == '#' || row[j] == '+') passages.emplace_back(new Cell(td, row[j], Coordinates{i,j}));
-			
-			else if(row[j] == ' ' || row[j] == '|' || row[j] == '-'){
+		for(int j = 0; row[j]; ++j){
+			//if(row[j] == '#' || row[j] == '+' || row[j] == '.') passages.emplace_back(new Cell(td, row[j], Coordinate{i,j}));
+			if(row[j] == ' ' || row[j] == '|' || row[j] == '-'){
 				
 			}
 			
 			else{
+				cells.emplace_back(new Cell(td, row[j], Coordinate{i,j}));
+			}
+		}
+		++i;
+	}
+	
+	//adds the neighbours
+	for(auto curCell : cells){
+		for(auto neighbourCell : cells){
+			if(oneTileAway(curCell->getPos(), neighbourCell->getPos())){
+				curCell->addNeighbour(neighbourCell);
+			}
+		}
+	}
+	
+	//make chambers
+	i = 0;
+	for(auto row : plan){
+		//cout<<"asdfasdf"<<i<<"\n";
+		for(int j = 0; row[j]; ++j){
+			if(!(invalidTile(row[j]))){
 				bool newChamber = true;
 				for(auto oldChamber : chambers){
-					//cout<<chambers.size()<<"("<<i<<" "<<j<<")"<<"I work\n";
-					if(oldChamber->ValidMove(Coordinates{i,j})){
-						newChamber = false;
-						
-					}
 					
+					if(oldChamber->ValidMove(Coordinate{i,j})){
+						newChamber = false;
+					}
 				}
 				
-				//cout<<"("<<i<<" "<<j<<")"<<"I work2\n";
-				if(newChamber) chambers.emplace_back(new Chamber(td, plan, Coordinates{i,j}, randGen));
-				
-				
+				if(newChamber){
+					
+					vector<Coordinate *> reqCells;
+					
+					
+					
+					Coordinate *newCoord = new Coordinate(i, j);
+					
+					
+					//cout<<reqCells.size()<<" ";
+					try{
+						reqCellsInChamber(newCoord, plan, reqCells);
+						chambers.emplace_back(new Chamber(td, reqCells, cells));
+					}
+					catch(...){
+						cout<<"caught the error\n";
+						cout<<reqCells.size()<<endl;
+						cout<<chambers.size()<<endl;
+						for(auto i : chambers){
+							i->printChamber();
+						}
+					}
+					
+
+				}
 			}
 		}
 		++i;
@@ -49,9 +137,6 @@ void Floor::printChamber(int i){
 }
 void Floor::print(){
 	td->print();
-}
-void Floor::notify(Subject &whoFrom){
-	
 }
 
 void Floor::readEntities(std::vector<std::string> plan){
@@ -88,7 +173,7 @@ void Floor::genGoldLoc(){
 	}
 }
 
-Coordinates Floor::genNextFloorLoc(){
+Coordinate Floor::genNextFloorLoc(){
 	int whichChamber = rand() % chambers.size();
 	
 	while(whichChamber == spawnRoom){
@@ -99,7 +184,8 @@ Coordinates Floor::genNextFloorLoc(){
 	return chambers.at(whichChamber)->genNextFloorLoc();
 }
 
-Coordinates Floor::genPlayerLoc(){
+Cell *Floor::genPlayerLoc(){
+	
 	int whichChamber = 	rand() % chambers.size();
 	
 	spawnRoom = whichChamber;
@@ -126,41 +212,41 @@ void Floor::deleteItem(Item *which){
 	
 }
 
-void Floor::NotifyCell(Coordinates coord){
+void Floor::NotifyCell(Coordinate coord){
 	
 }
 
-void Floor::NotifyGold(Coordinates coord){
-	for(auto i : chambers){
-		i->notifyItems();
-	}
+void Floor::NotifyGold(Coordinate coord){
+	//for(auto i : chambers){
+	//	i->notifyItems();
+	//}
 }
 
 void Floor::react(PlayerRace *player){
-	for(auto i : chambers){
-		i->react(player);
-	}
+	//for(auto i : chambers){
+	//	i->react(player);
+	//}
 }
 
-void Floor::notifyItem(Coordinates nextPos, PlayerRace *player){
-	for(auto i : chambers){
-		i->notifyItem(nextPos, player);
-	}
+void Floor::notifyItem(Coordinate nextPos, PlayerRace *player){
+	//for(auto i : chambers){
+	//	i->notifyItem(nextPos, player);
+	//}
 }
 
 void Floor::moveEnemies(){
-	for(auto i : chambers){
-		i->moveEnemies();
-	}
+	//for(auto i : chambers){
+	//	i->moveEnemies();
+	//}
 }
 void Floor::NotifyItems(){
-	for(auto i : chambers){
-		i->notifyItems();
-	}
+	//for(auto i : chambers){
+	//	i->notifyItems();
+	//}
 }
 
-bool Floor::ValidMove(Coordinates coord){
-	for(auto i : passages){
+bool Floor::ValidMove(Coordinate coord){
+	for(auto i : cells){
 		if(i->getPos() == coord){
 			return true;
 		}
@@ -183,19 +269,12 @@ bool Floor::ValidMove(Coordinates coord){
 	return false;
 }
 
-Coordinates Floor::getRandCoords(){
-	/* random chamber position here*/
-	
-	//for testing
-	return chambers.at(0)->genPlayerLoc();
-}
 
-void Floor::notifyChamber(){
+void Floor::bloom(){
 	for(auto i : chambers){
 		i->bloom();
+		i->printChamber();
 	}
 	
-	for(auto i : passages){
-		td->notify(*i);
-	}
 }
+

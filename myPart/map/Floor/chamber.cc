@@ -1,82 +1,46 @@
 #include "chamber.h"
 #include <algorithm>
 #include <iostream>
-#include "../Display/textDisplay.h"
-#include "../../character/character.h"
-#include "../../item/item.h"
+
+#include "../../character/enemyRace/dragon.h"
+#include "../../character/enemyRace/dwarf.h"
+#include "../../character/enemyRace/elf.h"
+#include "../../character/enemyRace/halfling.h"
+#include "../../character/enemyRace/human.h"
+#include "../../character/enemyRace/merchant.h"
+#include "../../character/enemyRace/orc.h"
+
+#include "../../item/potions/boostatk.h"
+#include "../../item/potions/boostdef.h"
+#include "../../item/potions/poisonhealth.h"
+#include "../../item/potions/restorehealth.h"
+#include "../../item/potions/woundatk.h"
+#include "../../item/potions/wounddef.h"
+
+#include "../../item/gold/dhoard.h"
+#include "../../item/gold/mhoard.h"
+#include "../../item/gold/normal.h"
+#include "../../item/gold/small.h"
+
 
 #include<stdlib.h>
 
 using namespace std;
 
 
-bool invalidTile(char test){return (test == ' ' || test == '|' || test == '-' || test == '#' || test == '+'); }
 
-
-
-bool oneTileAway(Coordinates obj1, Coordinates obj2){
-	int diffX = obj1.x - obj2.x;
-	int diffY = obj1.y - obj2.y;
-	
-	diffX = abs(diffX);
-	diffY = abs(diffY);
-	
-	return diffX <= 1 && diffY <= 1 && !(diffX == 0 && diffY == 0);
-}
-
-bool detAddCoord(vector<Coordinates> &chamberCoords, vector<string> &plan, int xOff, int yOff, auto &i){
-	if(!invalidTile(plan.at(i.x + xOff)[i.y + yOff])){
-		if(chamberCoords.end() == find_if(chamberCoords.begin(), chamberCoords.end(), [&](Coordinates inCoord){return inCoord.x == i.x + xOff && inCoord.y == i.y + yOff; })){
-			chamberCoords.emplace_back(Coordinates{i.x + xOff, i.y + yOff});
-			return true;
-		}
-	}
-	
-	return false;
-}
-Chamber::Chamber(TextDisplay *td, vector<string> plan, Coordinates coord, bool whatGen):myTd{td}{
-	vector<Coordinates> chamberCoords;
-	
-	chamberCoords.emplace_back(coord);
-	
-	bool newTile = true;
-	
-	while(newTile){
-		newTile = false;
-		for (auto i : chamberCoords){
-			newTile = detAddCoord(chamberCoords, plan, 1, 0, i) || newTile;
-			newTile = detAddCoord(chamberCoords, plan, 0, 1, i) || newTile;
-			newTile = detAddCoord(chamberCoords, plan, -1, 0, i) || newTile;
-			newTile = detAddCoord(chamberCoords, plan, 0, -1, i) || newTile;
-		}
-	}
-	/*
-	for(int i = 2; i < 8; ++i){
-		for(auto pos : chamberCoords){
-			if(pos.x == i)
-			cout<<"("<<pos.x<<" "<<pos.y<<")";
-		}
-		cout<<endl;
-	}
-	cout<<"I work 2 "<<chamberCoords.size()<<endl<<endl;*/
-	
-	// creates the cells
-	for(auto i : chamberCoords)
-		cells.emplace_back(new Cell(td, '.', i));
-	
-	//adds the observers
-	for(auto curCell : cells){
-		for(auto observerCell : cells){
-			if(oneTileAway(curCell->getPos(), observerCell->getPos())){
-				curCell->addObserver(observerCell);
+Chamber::Chamber(TextDisplay *td, vector<Coordinate*> &reqCells, const vector<Cell*> &theCells):myTd{td}{
+	for(auto i : reqCells){
+		for(auto cell : theCells){
+			if((*i) == cell->getPos()){
+				cells.emplace_back(cell);
+				break;
 			}
 		}
-		curCell->addObserver(td);
-		
 	}
-	
 }
 
+/*
 bool dragonPileChar(char test){
 	return test == '9';
 }
@@ -90,11 +54,12 @@ bool itemChar(char test){
 	}
 	
 	return false;
-}
+}*/
 void Chamber::readEntities(std::vector<std::string> plan){
-	for(size_t i = 0; i < plan.size(); ++i){
-		for(size_t j = 0; j < plan.at(0).size(); ++j){
-			Coordinates candidate = Coordinates{i, j};
+	/*
+	for(int i = 0; i < plan.size(); ++i){
+		for(int j = 0; j < plan.at(0).size(); ++j){
+			Coordinate candidate = Coordinate{i, j};
 			if(ValidMove(candidate)){
 				if(dragonPileChar(plan.at(i)[j])){
 					Item *newDragPile = new Item(myTd, candidate);
@@ -103,33 +68,33 @@ void Chamber::readEntities(std::vector<std::string> plan){
 					
 					//assume that dragon hoards are well spaced out
 					if(plan.at(i+1)[j] == dragChar){
-						++(candidate.x);
+						++(candidate.X);
 					}
 					else if(plan.at(i+1)[j+1] == dragChar){
-						++(candidate.x);
-						++(candidate.y);
+						++(candidate.X);
+						++(candidate.Y);
 					}
 					else if(plan.at(i)[j+1] == dragChar){
 						
-						++(candidate.y);
+						++(candidate.Y);
 					}
 					else if(plan.at(i-1)[j+1] == dragChar){
-						--(candidate.x);
-						++(candidate.y);
+						--(candidate.X);
+						++(candidate.Y);
 					}
 					else if(plan.at(i-1)[j] == dragChar){
-						--(candidate.x);
+						--(candidate.X);
 					}
 					else if(plan.at(i-1)[j-1] == dragChar){
-						--(candidate.x);
-						--(candidate.y);
+						--(candidate.X);
+						--(candidate.Y);
 					}
 					else if(plan.at(i)[j-1] == dragChar){
-						--(candidate.y);
+						--(candidate.Y);
 					}
 					else if(plan.at(i+1)[j-1] == dragChar){
-						++(candidate.x);
-						--(candidate.y);
+						++(candidate.X);
+						--(candidate.Y);
 					}
 					
 					enemies.emplace_back(new EnemyRace(myTd, candidate));
@@ -144,111 +109,79 @@ void Chamber::readEntities(std::vector<std::string> plan){
 			}
 		}
 	}
-	
-}
-
-void Chamber::notifyItem(Coordinates nextPos, PlayerRace *player){
-	items.erase(remove_if(items.begin(), items.end(), 
-		[&](Item *item){
-			return item->getPos() == nextPos;
-		}), items.end());
-		
-	for (auto cell : cells){
-		if(cell->getPos() == nextPos){
-			cell->setOccupy(false);
-			break;
-		}
-	}
-	/*for(auto i = items.begin(): i != items.end(); ++i){
-		if((*i)->getPos() == nextPos){
-			delete i;
-			break
-		}
-	}*/
+	*/
 }
 
 void Chamber::printChamber(){
-	for(int i = 0; i < 30; ++i){
-		for(auto cell : cells){
-			
-			cout<<cell->getDispChar();
-			
-			/*
-			Coordinates pos = cell->getPos();
-			if(pos.x == i)
-				cout<<"("<<pos.x<<" "<<pos.y<<")";
-				* */
-		}
-		cout<<endl;
-	}
+	;
 }
 
 
-Coordinates Chamber::genLoc(char whatChar){
+Coordinate Chamber::genLoc(char whatChar){
 	bool occupied = true;
 	
 	while(occupied){
 		int whichLoc = rand() % cells.size();
-		Coordinates candidateLoc = cells.at(whichLoc)->getPos();
-		occupied = cells.at(whichLoc)->getOccupy();
+		Coordinate candidateLoc = cells.at(whichLoc)->getPos();
+		occupied = cells.at(whichLoc)->isOccupiedEnemy();
 		
-		//cout<<"123123"<<endl;
-		
-/*		for(auto i : enemies){
-			if(i->getPos() == candidateLoc){
-				occupied = true;
-				break;
-			}
-		}
-		
-		for(auto i : items){
-			if(i->getPos() == candidateLoc){
-				occupied = true;
-				break;
-			}
-		}*/
 		
 		if(!occupied){
-			cells.at(whichLoc)->setOccupy(true);
+			//cells.at(whichLoc)->setOccupy(true);
 			cells.at(whichLoc)->setChar(whatChar);
 			return cells.at(whichLoc)->getPos();
 		}
 	}
 	
 }
-Coordinates Chamber::genNextFloorLoc(){
+Coordinate Chamber::genNextFloorLoc(){
 	return genLoc('/');
 	
 }
 
-Coordinates Chamber::genPlayerLoc(){
-	return genLoc('.');
+Cell *Chamber::genPlayerLoc(){
+	
+	
+	Coordinate tmp = genLoc('.');
+	
+	for(auto i : cells){
+		if(i->getPos() == tmp){
+			return i;
+		}
+	}
+	
+	//should not be possible
+	return nullptr;
 }
 
 void Chamber::genMonsterLoc(){
-	//cout<<"111"<<endl;
-	Coordinates newLoc = genLoc('.');
-	enemies.emplace_back(new EnemyRace(myTd, newLoc));
+	Coordinate newLoc = genLoc('.');
+	
+	//for now, will have a factory later
+	//enemies.emplace_back(new Human(newLoc, Cell{myTd, 'H', newLoc} ));
 	
 }
 
 void Chamber::genPotionLoc(){
-	//cout<<"222"<<endl;
-	Coordinates newLoc = genLoc('.');
-	items.emplace_back(new Item(myTd, newLoc));
+	
+	Coordinate newLoc = genLoc('.');
+	
+	//for now, will have a factory later
+	//items.emplace_back(new BoostATK(newLoc, Cell{myTd, 'P', newLoc}));
 }
 
 void Chamber::genGoldLoc(){
-	//cout<<"333"<<endl;
-	Coordinates newLoc = genLoc('.');
-	items.emplace_back(new Item(myTd, newLoc));
+	Coordinate newLoc = genLoc('.');
+	
+	//will have a factory later
+	//items.emplace_back(new Normal(newLoc, Cell{myTd, 'G', newLoc}));
 }
 
 void Chamber::genChamber(){
 	
 }
 
-bool Chamber::InChamber(Coordinates coord){
+bool Chamber::InChamber(Coordinate coord){
 	
 }
 
@@ -256,7 +189,7 @@ void Chamber::deleteItem(Item *which){
 	
 }
 
-bool Chamber::ValidMove(Coordinates coord){
+bool Chamber::ValidMove(Coordinate coord){
 	
 	Cell *candCell = nullptr;
 	for(auto cell : cells){
@@ -268,54 +201,47 @@ bool Chamber::ValidMove(Coordinates coord){
 	/*
 	bool test = cells.end() == find_if(cells.begin(), cells.end(), 
 		[&coord](Cell *inCell)
-			{return inCell->getPos().x == coord.x && inCell->getPos().y == coord.y; });
+			{return inCell->getPos().X == coord.X && inCell->getPos().Y == coord.Y; });
 	*/
 	
-	if(candCell) return !(candCell->getOccupy());
+	if(candCell) {
+		return !(candCell->isOccupiedEnemy());
+	}
 	
-	else return false;
+	else {
+		return false;
+	}
 	
 }
 
-void Chamber::setOccupy(Coordinates pos, bool toWhat){
+void Chamber::setOccupy(Coordinate pos, bool toWhat){
 	for(auto i : cells){
 		if(i->getPos() == pos){ 
-			i->setOccupy(toWhat);
+			//i->setOccupy(toWhat);
 			return;
 		}
 	}
 }
 void Chamber::react(PlayerRace *player){
 	for(auto i : enemies){
-		i->react(player);
+	//	i->react(player);
 	}
 }
 bool Chamber::moveEnemies(){
-	
-	for(auto i : enemies) {
-		Coordinates nextPos = i->move();
-		
-		if(ValidMove(nextPos)) {
-			setOccupy(i->getPos(), false);
-			i->setPos(nextPos);
-			setOccupy(i->getPos(), true);
-		}
-		i->notifyObservers();
-		
-	}
+	return true;
 	
 }
 
 void Chamber::notifyItems(){
 	
-	for(auto i : items) {
-		i->notifyObservers();
-		
-	}
+	
 	
 }
 
 void Chamber::bloom(){
-	cells.at(0)->notifyObservers();
-	for(auto i : cells) i->notifyObservers();
+	for(auto i : cells){
+		i->setChar('b');
+		myTd->notify(*i);
+	}
+	cout<<"size: "<<cells.size()<<endl;
 }

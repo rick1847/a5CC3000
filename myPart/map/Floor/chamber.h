@@ -3,14 +3,22 @@
 
 #include <vector>
 #include <string>
-#include "../coordinates.h"
-#include "../Cell/cell.h"
 
+#include "../../coordinate.h"
+#include "../Cell/cell.h"
+#include "../../display/textDisplay.h"
+#include "../../character/character.h"
+#include "../../item/item.h"
+
+#include "../../character/enemyRace/enemyrace.h"
+
+/*
 class Item;
 class EnemyRace;
 class PlayerRace;
 class Item;
 class TextDisplay;
+*/
 
 class Chamber{
 	bool randGen;
@@ -23,29 +31,29 @@ class Chamber{
 
 	
 	
-	Coordinates genLoc(char whatChar);
+	Coordinate genLoc(char whatChar);
 	public:
 	
 	void genPotionLoc();
 	void genGoldLoc();
 	void genMonsterLoc();
 	
-	Chamber(TextDisplay *td, std::vector<std::string> plan, Coordinates coord, bool whatGen);
+	Chamber(TextDisplay *td, std::vector<Coordinate*> &reqCells, const std::vector<Cell*> &theCells);
 	
 	void genChamber();
-	Coordinates genPlayerLoc();
-	Coordinates genNextFloorLoc();
+	Cell *genPlayerLoc();
+	Coordinate genNextFloorLoc();
 	
-	bool InChamber(Coordinates coord);
+	bool InChamber(Coordinate coord);
 	void deleteItem(Item *which);
 	
-	bool ValidMove(Coordinates coord);
+	bool ValidMove(Coordinate coord);
 	
 	void react(PlayerRace *player);
-	void notifyItem(Coordinates nextPos, PlayerRace *player);
+	void notifyItem(Coordinate nextPos, PlayerRace *player);
 	bool moveEnemies();
 	
-	void setOccupy(Coordinates pos, bool toWhat);
+	void setOccupy(Coordinate pos, bool toWhat);
 	
 	void bloom();
 	void printChamber();
@@ -54,4 +62,6 @@ class Chamber{
 
 };
 
+
+//void reqCellsInChamber(Coordinate coord, std::vector<std::string> plan, std::vector<Coordinate*> &chamberCoords);
 #endif

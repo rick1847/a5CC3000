@@ -1,84 +1,63 @@
 #include "character.h"
 
-PlayerRace::PlayerRace(Observer *td, Coordinates coords):Subject(coords){
-	dispChar = '@';
-	addObserver(td);
-}
-
-void PlayerRace::move(Coordinates newCoords){
-	setPos(newCoords);
-	notifyObservers();
-	
-//	dispChar = 'p';
-}
 
 
-EnemyRace::EnemyRace(Observer *td, Coordinates coords):Subject(coords){
-	dispChar = 'e';
-	addObserver(td);
+Character::Character(Stats &s, Stats &bs, Coordinate &p, Cell &c) : stats(&s), baseStats(&bs), position(&p), cell(&c)
+{}
+
+Character::~Character() {
+	delete stats;
+	delete baseStats;
 }
 
-Coordinates moveWhere(Coordinates curCoord, int instr){
-	
-	if(instr == 0){
-		curCoord.x += 1;
-		curCoord.y += 1;
-	}
-	else if(instr == 1){
-		curCoord.x += 1;
-		curCoord.y += 0;
-	}
-	else if(instr == 2){
-		curCoord.x += 1;
-		curCoord.y += -1;
-		
-	}
-	else if(instr == 3){
-		curCoord.x += 0;
-		curCoord.y += 1;
-		
-	}
-	else if(instr == 4){
-		curCoord.x += 0;
-		curCoord.y += -1;
-		
-	}
-	else if(instr == 5){
-		curCoord.x += -1;
-		curCoord.y += 1;
-	}
-	else if(instr == 6){
-		curCoord.x += -1;
-		curCoord.y += 0;
-	}
-	else if(instr == 7){
-		curCoord.x += -1;
-		curCoord.y += -1;
-	}
-	
-	return curCoord;
+void Character::specialEffect(Vampire &to) {
+	(void)to;
 }
 
-bool oneTileAway2(Coordinates obj1, Coordinates obj2){
-	int diffX = obj1.x - obj2.x;
-	int diffY = obj1.y - obj2.y;
-	
-	diffX = abs(diffX);
-	diffY = abs(diffY);
-	
-	return diffX <= 1 && diffY <= 1 && !(diffX == 0 && diffY == 0);
+void Character::specialEffect(Goblin &to) {
+	(void)to;
 }
 
-#include <iostream>
-void EnemyRace::react(PlayerRace *player){
-	if(oneTileAway2(getPos(), player->getPos())){
-		std::cout<<"I reacted"<<getPos().x<<" "<<getPos().y<<std::endl;
-	}
+void Character::specialEffect(Drow &to) {
+	(void)to;
 }
-Coordinates EnemyRace::move(){
-	int instr = rand() % 8;
-	
-	Coordinates nextPos = moveWhere(position, instr);
-	
-	return nextPos;
+
+void Character::specialEffect(Character &to) {
+	(void)to;
 }
+
+void Character::receiveEffect(Character &from) {
+	from.specialEffect(*this);
+}
+
+char Character::getAvatar() {
+	return '.';
+}
+
+void Character::attack(Character &who) {
+	who.takeHit(*this);
+}
+
+void Character::takeHit(Character &from) {
+	int dmg = ceil(100 / (100 + stats->getDEF()) * from.getStats().getATK());
+	stats->addHP(-dmg);
+}
+
+Stats &Character::getStats() {
+	return *stats;
+}
+
+Stats &Character::getBaseStats() {
+	return *baseStats;
+}
+
+void Character::changeStats(Stats &newS) {
+	delete stats;
+	stats = &newS;
+}
+
+
+//NOT IMPELEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
+	 void Character::die(){}
+	//NOT IMPLEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
+	 void Character::move(){}

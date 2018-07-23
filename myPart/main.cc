@@ -2,7 +2,7 @@
 #include<iostream>
 #include<string>
 
-#include"map/dungeon.h"
+#include"dungeon.h"
 int main(int argc, char **argv){
 
 	bool randGen = true;

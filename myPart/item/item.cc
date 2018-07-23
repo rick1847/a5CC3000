@@ -1,6 +1,26 @@
 #include "item.h"
 
-Item::Item(Observer *td, Coordinates coords):Subject(coords){
-	dispChar = 'i';
-	addObserver(td);
+
+Item::Item(Coordinate &p, Cell &c) : position(&p), cell(&c)
+{}
+
+Item::~Item(){
+	delete position;
+	delete cell;
+}
+
+void Item::myEffect(PlayerRace &pl) {
+	(void)pl;
+}
+
+std::string Item::giveType() {
+	return "a thing";
+}
+
+char Item::getAvatar() {
+	return '.';
+}
+
+Coordinate Item::getPos(){
+	return *position;
 }

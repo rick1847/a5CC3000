@@ -1,12 +1,12 @@
 #ifndef ___FLOOR___H___
 #define ___FLOOR___H___
 
-#include "../subject.h"
-#include "../observer.h"
+#include "../../subject.h"
+#include "../../observer.h"
 #include "../Cell/cell.h"
 #include "chamber.h"
-#include "../coordinates.h"
-#include "../Display/textDisplay.h"
+#include "../../coordinate.h"
+#include "../../display/textDisplay.h"
 
 #include<vector>
 #include<string>
@@ -16,14 +16,14 @@ class EnemyRace;
 class PlayerRace;
 
 
-class Floor: public Observer{
+class Floor{
 	
 	bool randGen;
 	
 	const int maxEnemies = 20;
 	const int maxPotions = 10;
 	const int maxTreasure = 10;
-	std::vector<Cell*> passages;
+	std::vector<Cell*> cells;
 	std::vector<Item*> items;
 	std::vector<EnemyRace*> enemies;
 	std::vector<Chamber*> chambers;
@@ -36,8 +36,8 @@ class Floor: public Observer{
 	void genGoldLoc();
 	void genMonsterLoc();
 
-	Coordinates spawnLoc;
-	Coordinates nextFloorLoc;
+	Coordinate spawnLoc;
+	Coordinate nextFloorLoc;
 	
 	void readEntities(std::vector<std::string> plan);
 	public:
@@ -45,25 +45,24 @@ class Floor: public Observer{
 	Floor(std::vector<std::string> plan, TextDisplay *td, bool whatGen);
 	
 	void react(PlayerRace *player);
-	void notifyItem(Coordinates nextPos, PlayerRace *player);
+	void notifyItem(Coordinate nextPos, PlayerRace *player);
 	void print();
-	void notify(Subject &whoFrom) override;
+	//void notify(Subject &whoFrom) override;
 	void genFloor();
 	void moveEnemies();
 	void deleteEnemy(EnemyRace *which);
 	void deleteItem(Item *which);
-	void NotifyCell(Coordinates coord);
-	void NotifyGold(Coordinates coord);
+	void NotifyCell(Coordinate coord);
+	void NotifyGold(Coordinate coord);
 	void NotifyItems();
-	bool ValidMove(Coordinates coord);
-	Coordinates getRandCoords();
+	bool ValidMove(Coordinate coord);
 	
 	void printChamber(int i);
-	void notifyChamber();
+	void bloom();
 	
 	
-	Coordinates genNextFloorLoc();
-	Coordinates genPlayerLoc();
+	Coordinate genNextFloorLoc();
+	Cell *genPlayerLoc();
 
 };
 
