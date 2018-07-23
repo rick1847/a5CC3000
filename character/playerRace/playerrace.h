@@ -12,7 +12,6 @@ public:
 	void takeHit(Character &from) override;
 
 	void move(std::string dir);
-	Cell *getCell();
 };
 
 

@@ -10,7 +10,6 @@ public:
 	//param is itself
 	virtual void specialEffect(Drow &to) override;
 
-	//void takeHit(Character &from);
 	void die() override;
 	//NOT IMPLEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
 	void move() override;
