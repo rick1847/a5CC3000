@@ -27,7 +27,7 @@ bool topWallBottomWall(const string & a){
 	return true;
 }
 
-Dungeon::Dungeon(ifstream &mapFile, bool whatGen){
+Dungeon::Dungeon(ifstream &mapFile, bool whatGen):randGen{whatGen}{
 	string floorLine;
 	int i = 0;
 	
@@ -62,7 +62,10 @@ Dungeon::Dungeon(ifstream &mapFile, bool whatGen){
 			cout<<j<<endl;
 		}
 	}*/
-	level = 1;
+	level = 0;
+	td = nullptr;
+	nextFloor();
+	/*
 	td = new TextDisplay(FloorMaps.at(level));
 	
 	currentFloor = new Floor(FloorMaps.at(0), td, whatGen);
@@ -78,7 +81,9 @@ Dungeon::Dungeon(ifstream &mapFile, bool whatGen){
 
 	nextFloorLoc = currentFloor->genNextFloorLoc();
 	
-	currentFloor->genFloor();
+	currentFloor->genFloor();*/
+	
+	
 	
 	
 	
@@ -102,6 +107,14 @@ void Dungeon::play(){
 //			currentFloor->bloom();
 			
 		//}
+		
+		if(cmd == 'm'){
+			cin>>cmd;
+			
+			player->move(cmd);
+		}
+		else if(cmd == 'n') nextFloor();
+		moveEnemies();
 	/*	
 		currentFloor->notifyChamber();
 		currentFloor->moveEnemies();
@@ -201,6 +214,8 @@ void Dungeon::play(){
 		
 		
 		//system("clear");*/
+		
+		system("clear");
 	}
 }
 
@@ -209,21 +224,31 @@ void Dungeon::chooseChar(){
 }
 
 void Dungeon::moveEnemies(){
-	
+	currentFloor->moveEnemies();
 }
 
 void Dungeon::nextFloor(){
-/*	delete currentFloor;
+	td = new TextDisplay(FloorMaps.at(level));
+	
 	currentFloor = new Floor(FloorMaps.at(level), td, randGen);
 	
-	player->move(currentFloor->genPlayerLoc());
 	
+	//for now just use drow
+	Cell* tmp = currentFloor->genPlayerLoc();
+	Coordinate *tmpCoord = tmp->getPosPtr();
+	
+	//want this line out###########################################################################################################################################
+	player = new Drow(*tmpCoord, *tmp);
+	tmp->setCharacterHere(player);
+	
+	//player->notifyObservers();
+
 	nextFloorLoc = currentFloor->genNextFloorLoc();
 	
 	currentFloor->genFloor();
 	
-	td->load(FloorMaps.at(level));
-	++level;*/
+	
+	++level;
 }
 
 void Dungeon::victory(){

@@ -75,12 +75,62 @@ char Cell::getDispChar(){
 	return dispChar;
 }
 
-void Cell::send(){
-	for(auto i : neighbours){
-		i->receive(this);
+//is cell2 in some direction dir of cell1
+bool inDir(char dir, Cell *cell1, Cell *cell2){
+	Coordinate pos1 = cell1->getPos();
+	Coordinate pos2 = cell2->getPos();
+	
+	if(dir == 'n'){
+		return pos2.X < pos1.X && pos2.Y == pos1.Y;
+	}
+	else if(dir == 's'){
+		return pos2.X > pos1.X && pos2.Y == pos1.Y;
+	}
+	else if(dir == 'e'){
+		return pos2.X == pos1.X && pos2.Y > pos1.Y;
+	}
+	else if(dir == 'w'){
+		return pos2.X == pos1.X && pos2.Y < pos1.Y;
+	}
+	else{
+		return false;
 	}
 }
 
+#include<iostream>
+void Cell::send(char dir){
+	
+	bool changed = false;
+	for(auto cell : neighbours){
+		changed = false;
+		if(inDir(dir, this, cell)){
+			changed = cell->receive(characterHere);
+			
+			//character moved
+			if(changed){
+				
+				characterHere = nullptr;
+			}
+			//characterHere = nullptr;
+			std::cout<<changed<<std::endl;
+			return;
+		}
+		
+		//if we can get position
+		/*
+		changed = cell->receive(characterHere);
+		if(changed){
+			characterHere = nullptr;
+			return;
+		}*/
+	}
+}
+
+void Cell::send(){
+	for(i : neighbours){
+		i->receive(this);
+	}
+}
 void Cell::receive(Cell *neighbour){
 	if(dispChar < 122){
 		++dispChar;
@@ -89,6 +139,28 @@ void Cell::receive(Cell *neighbour){
 	else{
 		//td->notify(*this);
 	}
+	
+	
+}
+
+bool Cell::receive(Character *myChar){
+	//if we can get position
+	/*if(myChar->getPos() == position){
+		characterHere = myChar;
+		characterHere->changeCell(this);
+		return true;
+	}*/
+	
+	
+	//empty cell means place
+	if(!characterHere && !itemHere){
+		characterHere = myChar;
+		characterHere->changeCell(this);
+		
+		return true;
+	}
+	//nothing changed
+	return false;
 }
 void Cell::bloom(){
 	send();

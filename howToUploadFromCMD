@@ -5,5 +5,5 @@ git init
 #git remote -v
 git pull origin master
 git add .
-git commit -m "Display Items Done"
+git commit -m "your message here"
 git push origin master

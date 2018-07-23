@@ -12,7 +12,8 @@ void Dwarf::specialEffect(Vampire &to) {
 char Dwarf::getAvatar() {
 	return 'W';
 }
-
+/*
 void Dwarf::move(){
 	
 }
+*/

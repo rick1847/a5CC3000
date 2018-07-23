@@ -19,3 +19,8 @@ void PlayerRace::takeHit(Character &from) {
 char PlayerRace::getAvatar() {
 	return '@';
 }
+
+void PlayerRace::move(char dir){
+	cell->send(dir);
+	position = cell->getPosPtr();
+}

@@ -1,6 +1,23 @@
 #include "character.h"
+#include <cstdlib>
 
-
+char whatDir(int key){
+	if(key == 0){
+		return 'n';
+	}
+	if(key == 1){
+		return 's';
+	}
+	if(key == 2){
+		return 'e';
+	}
+	if(key == 3){
+		return 'w';
+	}
+	
+	//else
+	return 'n';
+}
 
 Character::Character(Stats &s, Stats &bs, Coordinate &p, Cell &c) : stats(&s), baseStats(&bs), position(&p), cell(&c)
 {}
@@ -56,8 +73,17 @@ void Character::changeStats(Stats &newS) {
 	stats = &newS;
 }
 
-
+void Character::changeCell(Cell *whatCell){
+	cell = whatCell;
+}
 //NOT IMPELEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
 	 void Character::die(){}
 	//NOT IMPLEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
-	 void Character::move(){}
+	 void Character::move(){
+		 int where = rand() % 4;
+	
+		char dir = whatDir(where);
+	
+		cell->send(dir);
+		position = cell->getPosPtr();
+	}

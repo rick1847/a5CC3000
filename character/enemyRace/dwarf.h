@@ -10,7 +10,7 @@ public:
 	void specialEffect(Vampire &to) override;
 	char getAvatar() override;
 	//call specialEffect at the end of this method
-	void move() override;
+	//void move() override;
 };
 
 

@@ -240,6 +240,9 @@ void Floor::moveEnemies(){
 	//for(auto i : chambers){
 	//	i->moveEnemies();
 	//}
+	for(i : enemies){
+		i->move();
+	}
 }
 void Floor::NotifyItems(){
 	//for(auto i : chambers){

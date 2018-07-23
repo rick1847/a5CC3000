@@ -66,11 +66,13 @@ class Cell{
 
 	void alertDisplayOfChange();
 
-	//Character * myChar later
+	
+	
 	void send();
 	void receive(Cell *neighbour);
 
-	void receive(Character *myChar);
+	void send(char dir);
+	bool receive(Character *myChar);
 
 	void bloom();
 	

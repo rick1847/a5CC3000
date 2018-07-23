@@ -10,6 +10,8 @@ public:
 	virtual ~PlayerRace() = 0;
 	char getAvatar() override;
 	void takeHit(Character &from) override;
+
+	void move(char dir);
 };
 
 

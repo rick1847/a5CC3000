@@ -9,14 +9,19 @@ class Vampire;
 class Goblin;
 class Drow;
 
+char whatDir(int key);
+
 class Character {
 	Stats *stats;
 	//stats will reset to base values at the end of the floor
 	//(permanent modifiers will modify baseStats in addition to stats)
 	Stats *baseStats;
-	Coordinate *position;
+	
+protected:
 	//the cell the character is standing on
 	Cell *cell;
+
+	Coordinate *position;
 public:
 	Character(Stats &s, Stats &bs, Coordinate &p, Cell &c);
 	virtual ~Character() = 0;
@@ -35,6 +40,9 @@ public:
 	Stats &getStats();
 	Stats &getBaseStats();
 	void changeStats(Stats &newS);
+
+	void changeCell(Cell *whatCell);
+
 	//NOT IMPELEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
 	virtual void die();
 	//NOT IMPLEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
