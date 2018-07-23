@@ -3,6 +3,7 @@
 #include "../../character/character.h"
 #include "../../item/item.h"
 
+using namespace std;
 Cell::Cell(TextDisplay *display, char type, Coordinate coord):position{coord},td{display}{
 	
 	dispChar = type;
@@ -75,22 +76,49 @@ char Cell::getDispChar(){
 	return dispChar;
 }
 
+//is pos2 east of pos1
+bool isEast(Coordinate pos1, Coordinate pos2){
+	return pos2.Y > pos1.Y;	
+}
+//is pos2 north of pos1 (note, north is less)
+bool isNorth(Coordinate pos1, Coordinate pos2){
+	return pos2.X < pos1.X;
+}
+bool sameNorthNess(Coordinate pos1, Coordinate pos2){
+	return pos2.X == pos1.X;
+}
+
+bool sameEastNess(Coordinate pos1, Coordinate pos2){
+	return pos2.Y == pos1.Y;
+}
 //is cell2 in some direction dir of cell1
-bool inDir(char dir, Cell *cell1, Cell *cell2){
+bool inDir(string dir, Cell *cell1, Cell *cell2){
 	Coordinate pos1 = cell1->getPos();
 	Coordinate pos2 = cell2->getPos();
 	
-	if(dir == 'n'){
-		return pos2.X < pos1.X && pos2.Y == pos1.Y;
+	if(dir == "no"){
+		return isNorth(pos1, pos2) && sameEastNess(pos1, pos2);
 	}
-	else if(dir == 's'){
-		return pos2.X > pos1.X && pos2.Y == pos1.Y;
+	else if(dir == "so"){
+		return (!isNorth(pos1, pos2)) && sameEastNess(pos1, pos2);
 	}
-	else if(dir == 'e'){
-		return pos2.X == pos1.X && pos2.Y > pos1.Y;
+	else if(dir == "ea"){
+		return isEast(pos1, pos2) && sameNorthNess(pos1, pos2);
 	}
-	else if(dir == 'w'){
-		return pos2.X == pos1.X && pos2.Y < pos1.Y;
+	else if(dir == "we"){
+		return (!isEast(pos1, pos2)) && sameNorthNess(pos1, pos2);
+	}
+	else if(dir == "ne"){
+		return isNorth(pos1, pos2) && isEast(pos1, pos2);
+	}
+	else if(dir == "nw"){
+		return isNorth(pos1, pos2) && (!isEast(pos1, pos2));
+	}
+	else if(dir == "se"){
+		return (!isNorth(pos1, pos2)) && isEast(pos1, pos2);
+	}
+	else if(dir == "sw"){
+		return (!isNorth(pos1, pos2)) && (!isEast(pos1, pos2));
 	}
 	else{
 		return false;
@@ -98,7 +126,7 @@ bool inDir(char dir, Cell *cell1, Cell *cell2){
 }
 
 #include<iostream>
-void Cell::send(char dir){
+void Cell::send(string dir){
 	
 	bool changed = false;
 	for(auto cell : neighbours){

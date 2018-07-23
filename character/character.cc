@@ -1,22 +1,38 @@
 #include "character.h"
 #include <cstdlib>
-
-char whatDir(int key){
-	if(key == 0){
-		return 'n';
+#include <string>
+using namespace std;
+string whatDir(){
+	
+	int whichDir = rand() % 8;
+	if(whichDir == 0){
+		return "no";
 	}
-	if(key == 1){
-		return 's';
+	else if(whichDir == 1){
+		return "so";
 	}
-	if(key == 2){
-		return 'e';
+	else if(whichDir == 2){
+		return "ea";
 	}
-	if(key == 3){
-		return 'w';
+	else if(whichDir == 3){
+		return "we";
+	}
+	else if(whichDir == 4){
+		return "ne";
+	}
+	else if(whichDir == 5){
+		return "nw";
+	}
+	else if(whichDir == 6){
+		return "se";
+	}
+	else if(whichDir == 7){
+		return "sw";
 	}
 	
-	//else
-	return 'n';
+	//should never reach here
+	return "";
+	
 }
 
 Character::Character(Stats &s, Stats &bs, Coordinate &p, Cell &c) : stats(&s), baseStats(&bs), position(&p), cell(&c)
@@ -79,11 +95,15 @@ void Character::changeCell(Cell *whatCell){
 //NOT IMPELEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
 	 void Character::die(){}
 	//NOT IMPLEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
-	 void Character::move(){
-		 int where = rand() % 4;
-	
-		char dir = whatDir(where);
-	
-		cell->send(dir);
-		position = cell->getPosPtr();
-	}
+
+void Character::move(){
+
+	string dir = whatDir();
+
+	cell->send(dir);
+	position = cell->getPosPtr();
+}
+
+Coordinate Character::getPos(){
+	return *position;
+}

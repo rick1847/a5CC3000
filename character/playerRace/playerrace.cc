@@ -1,6 +1,7 @@
 #include "playerrace.h"
 #include <cstdlib>
 
+using namespace std;
 
 PlayerRace::PlayerRace(Stats &s, Stats &bs, Coordinate &p, Cell &c) : Character(s, bs, p, c)
 {}
@@ -20,7 +21,7 @@ char PlayerRace::getAvatar() {
 	return '@';
 }
 
-void PlayerRace::move(char dir){
+void PlayerRace::move(string dir){
 	cell->send(dir);
 	position = cell->getPosPtr();
 }

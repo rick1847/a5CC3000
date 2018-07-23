@@ -1,7 +1,7 @@
 #ifndef PLAYERRACE_H
 #define PLAYERRACE_H
 #include "../character.h"
-
+#include <string>
 
 
 class PlayerRace : public Character {
@@ -11,7 +11,7 @@ public:
 	char getAvatar() override;
 	void takeHit(Character &from) override;
 
-	void move(char dir);
+	void move(std::string dir);
 };
 
 

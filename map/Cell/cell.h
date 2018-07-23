@@ -6,6 +6,7 @@
 #include "../../coordinate.h"
 
 #include <vector>
+#include <string>
 
 class Item;
 class Character;
@@ -71,7 +72,7 @@ class Cell{
 	void send();
 	void receive(Cell *neighbour);
 
-	void send(char dir);
+	void send(std::string dir);
 	bool receive(Character *myChar);
 
 	void bloom();

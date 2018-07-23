@@ -1,6 +1,6 @@
 #include <iostream>
 #include "dungeon.h"
-
+#include <string>
 //may put in sep func
 #include "character/playerRace/drow.h"
 #include "character/playerRace/goblin.h"
@@ -9,6 +9,8 @@
 
 
 using namespace std;
+
+std::ostream &operator<<(std::ostream &out, Coordinate &coord);
 
 bool topWallBottomWall(const string & a){
 	int i = 1;
@@ -94,11 +96,12 @@ void Dungeon::play(){
 	int i = 0;
 	
 	int moveTile;
-	char cmd = 0;
+	string cmd = "";
 	
 	
+	system("clear");
 	
-	while(cmd != 'q'){
+	while(cmd != "q"){
 		currentFloor->refresh();
 		currentFloor->print();
 		cin>>cmd;
@@ -108,12 +111,15 @@ void Dungeon::play(){
 			
 		//}
 		
-		if(cmd == 'm'){
+		if(cmd == "m"){
 			cin>>cmd;
 			
 			player->move(cmd);
+			
+			Coordinate curCoord = player->getPos();
+			cout<<curCoord<<endl;
 		}
-		else if(cmd == 'n') nextFloor();
+		else if(cmd == "n") nextFloor();
 		moveEnemies();
 	/*	
 		currentFloor->notifyChamber();
