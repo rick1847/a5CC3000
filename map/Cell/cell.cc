@@ -28,12 +28,14 @@ Coordinates Cell::getPos(){
 }
 */
 
-void Cell::deleteChar(Character *character){
-	
+void Cell::killChar(Character *character){
+	delete characterHere;
+	characterHere = nullptr;
 }
 
-void Cell::deleteItem(Item *item){
-	
+void Cell::removeItem(Item *item){
+	delete itemHere;
+	itemHere = nullptr;
 }
 
 void Cell::setItemHere(Item *item){
