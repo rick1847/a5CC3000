@@ -10,6 +10,7 @@ int Small::getAmount() {
 
 void Small::myEffect(PlayerRace &pl) {
 	pl.getStats().addGold(getAmount());
+	disappear();
 }
 
 std::string Small::giveType() {

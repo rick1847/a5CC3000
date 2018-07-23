@@ -16,51 +16,40 @@ class Item;
 class EnemyRace;
 class PlayerRace;
 
+const int maxEnemies = 20;
+const int maxPotions = 10;
+const int maxTreasure = 10;
 
 class Floor{
-	
+	//read floor layout from file, or randomly generate it?
 	bool randGen;
-	
-	const int maxEnemies = 20;
-	const int maxPotions = 10;
-	const int maxTreasure = 10;
 	std::vector<Cell*> cells;
 	std::vector<Item*> items;
 	std::vector<Character*> enemies;
 	std::vector<Chamber*> chambers;
-
 	TextDisplay *td;
-	
 	int spawnRoom = 0;
-	
+	Coordinate spawnLoc;
+	Coordinate nextFloorLoc;
+
 	void genPotionLoc();
 	void genGoldLoc();
 	void genMonsterLoc();
-
-	Coordinate spawnLoc;
-	Coordinate nextFloorLoc;
-	
-	void readEntities(std::vector<std::string> plan);
-	public:
-	
+public:
 	Floor(std::vector<std::string> plan, TextDisplay *td, bool whatGen);
-	
-	void print();
-	//void notify(Subject &whoFrom) override;
-	void genFloor();
-	void moveEnemies();
-	void reactEnemies(Character *character);
-	bool ValidMove(Coordinate coord);
-	
-	void printChamber(int i);
-	void bloom();
-	
-	
-	Coordinate genNextFloorLoc();
 	Cell *genPlayerLoc();
-	
+	void genFloor();
+	Coordinate &genNextFloorLoc();
+	void deleteEnemy(EnemyRace *which);
+	void deleteItem(Item *which);
+	void NotifyCell(Coordinate coord);
+	void NotifyGold(Coordinate coord);
+	void NotifyItems();
+	bool ValidMove(Coordinate coord);
+	void moveEnemies();
+	void bloom();
+	void readEntities(std::vector<std::string> plan);
 	void refresh();
-
 };
 
 #endif

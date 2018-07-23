@@ -1,10 +1,7 @@
 #include "character.h"
 #include <cstdlib>
 #include <string>
-
-#include<iostream>
 using namespace std;
-
 string whatDir(){
 	
 	int whichDir = rand() % 8;
@@ -71,15 +68,12 @@ char Character::getAvatar() {
 }
 
 void Character::attack(Character &who) {
-	//cout<<"I work"<<endl;
 	who.takeHit(*this);
 }
 
 void Character::takeHit(Character &from) {
 	int dmg = ceil(100 / (100 + stats->getDEF()) * from.getStats().getATK());
 	stats->addHP(-dmg);
-	
-	printStats();
 }
 
 Stats &Character::getStats() {
@@ -112,13 +106,4 @@ void Character::move(){
 
 Coordinate Character::getPos(){
 	return *position;
-}
-
-void Character::printStats(){
-	cout<<"Health: "<<stats->getHP()<<"/"<<stats->getMaxHP()<<"|";
-	
-	cout<<"Attack: "<<stats->getATK()<<"|";
-	cout<<"Defense: "<<stats->getDEF()<<"|";
-	cout<<"Gold: "<<stats->getGold()<<"|";
-	cout<<"Position: ("<<position->getX()<<" "<<position->getY()<<")"<<endl;
 }

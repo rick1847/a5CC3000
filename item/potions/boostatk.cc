@@ -16,6 +16,7 @@ void BoostATK::becomeKnown() {
 void BoostATK::myEffect(PlayerRace &pl) {
 	becomeKnown();
 	pl.getStats().addATK(5);
+	disappear();
 }
 
 std::string BoostATK::giveType() {

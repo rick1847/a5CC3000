@@ -16,6 +16,7 @@ void BoostDEF::becomeKnown() {
 void BoostDEF::myEffect(PlayerRace &pl) {
 	becomeKnown();
 	pl.getStats().addDEF(5);
+	disappear();
 }
 
 std::string BoostDEF::giveType() {

@@ -22,34 +22,29 @@ class TextDisplay;
 
 class Chamber{
 	bool randGen;
-	
 	std::vector<Cell*> cells;
-	
 	TextDisplay *myTd;
-
-	
-	
-	Coordinate genLoc(char whatChar);
-	public:
-	
+public:
+	Chamber(TextDisplay *td, std::vector<Coordinate*> &reqCells, const std::vector<Cell*> &theCells);
+	Coordinate *genLoc(char whatChar);
 	Item *genPotionLoc();
 	Item *genGoldLoc();
 	Character *genMonsterLoc();
-	Cell *getCellAt(Coordinate pos);
-	Chamber(TextDisplay *td, std::vector<Coordinate*> &reqCells, const std::vector<Cell*> &theCells);
-	
 	Cell *genPlayerLoc();
-	Coordinate genNextFloorLoc();
-	
-	bool ValidMove(Coordinate coord);
-	
+	Coordinate genStairLoc();
+	void genChamber();
+	Cell *getCellAt(Coordinate &pos);
+	bool InChamber(Coordinate &coord);
+	void deleteItem(Item *which);
+	bool ValidMove(Coordinate &coord);
+	bool moveEnemies();
 	void react(PlayerRace *player);
-	
-	
+	void notifyItem(Coordinate &nextPos, PlayerRace *player);
+	void notifyItems();
+	void setOccupy(Coordinate &pos, bool toWhat);
 	void bloom();
 	void printChamber();
 	void readEntities(std::vector<std::string> plan);
-
 };
 
 

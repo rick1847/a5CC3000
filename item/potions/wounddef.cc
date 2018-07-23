@@ -16,6 +16,7 @@ void WoundDEF::becomeKnown() {
 void WoundDEF::myEffect(PlayerRace &pl) {
 	becomeKnown();
 	pl.getStats().addDEF(-5);
+	disappear();
 }
 
 std::string WoundDEF::giveType() {

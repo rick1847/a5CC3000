@@ -16,7 +16,7 @@ void PoisonHealth::becomeKnown() {
 void PoisonHealth::myEffect(PlayerRace &pl) {
 	becomeKnown();
 	pl.getStats().addHP(-10);
-	pl.getBaseStats().addHP(-10);
+	disappear();
 }
 
 std::string PoisonHealth::giveType() {

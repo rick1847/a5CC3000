@@ -19,6 +19,7 @@ void DragonHoard::notifyDeath() {
 void DragonHoard::myEffect(PlayerRace &pl) {
 	if (guardian) {
 		pl.getStats().addGold(getAmount());
+		disappear();
 	}
 }
 

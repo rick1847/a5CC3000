@@ -14,13 +14,15 @@ public:
 	virtual ~Item() = 0;
 	//adjust player stats
 	virtual void myEffect(PlayerRace &pl);
+	//handle non-player character interacting with item
+	virtual void myEffect(Character &c);
 	//text display will say what the player is looking at
 	virtual std::string giveType();
 	//text display represents item using a char - see CC3K specification
 	virtual char getAvatar();
-
 	//virtual static bool isKnown() = 0;
-	Coordinate getPos();
+	Coordinate &getPos();
+	void disappear();
 };
 
 

@@ -16,6 +16,7 @@ void WoundATK::becomeKnown() {
 void WoundATK::myEffect(PlayerRace &pl) {
 	becomeKnown();
 	pl.getStats().addATK(-5);
+	disappear();
 }
 
 std::string WoundATK::giveType() {

@@ -9,6 +9,7 @@ int MerchHoard::getAmount() {
 
 void MerchHoard::myEffect(PlayerRace &pl) {
 	pl.getStats().addGold(getAmount());
+	disappear();
 }
 
 std::string MerchHoard::giveType() {

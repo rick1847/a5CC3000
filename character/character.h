@@ -12,20 +12,19 @@ class Drow;
 char whatDir(int key);
 
 class Character {
-	
-	
-protected:
 	Stats *stats;
 	//stats will reset to base values at the end of the floor
 	//(permanent modifiers will modify baseStats in addition to stats)
 	Stats *baseStats;
+	
+protected:
 	//the cell the character is standing on
 	Cell *cell;
 
 	Coordinate *position;
 public:
 	Character(Stats &s, Stats &bs, Coordinate &p, Cell &c);
-	virtual ~Character();// = 0;
+	virtual ~Character() = 0;
 	virtual void specialEffect(Vampire &to);
 	virtual void specialEffect(Goblin &to);
 	virtual void specialEffect(Drow &to);
@@ -41,16 +40,12 @@ public:
 	Stats &getStats();
 	Stats &getBaseStats();
 	void changeStats(Stats &newS);
-
 	void changeCell(Cell *whatCell);
-
 	//NOT IMPELEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
 	virtual void die();
 	//NOT IMPLEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
 	virtual void move();
-	
 	Coordinate getPos();
-	void printStats();
 };
 
 

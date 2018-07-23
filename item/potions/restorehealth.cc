@@ -16,7 +16,7 @@ void RestoreHealth::becomeKnown() {
 void RestoreHealth::myEffect(PlayerRace &pl) {
 	becomeKnown();
 	pl.getStats().addHP(10);
-	pl.getBaseStats().addHP(10);
+	disappear();
 }
 
 std::string RestoreHealth::giveType() {

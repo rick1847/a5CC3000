@@ -40,6 +40,214 @@ Chamber::Chamber(TextDisplay *td, vector<Coordinate*> &reqCells, const vector<Ce
 	}
 }
 
+Coordinate &Chamber::genLoc(char whatChar) {
+	bool occupied = true;
+	while (occupied) {
+		int whichLoc = rand() % cells.size();
+		Coordinate &candidateLoc = cells.at(whichLoc)->getPos();
+		occupied = cells.at(whichLoc)->isOccupied();
+		if (!occupied) {
+			cells.at(whichLoc)->setChar(whatChar);
+			return candidateLoc;
+		}
+	}
+}
+
+Item *Chamber::genPotionLoc() {
+	Coordinate &newLoc = genLoc('.');
+	Cell *whichCell = getCellAt(newLoc);
+	int potionToSpawn = rand % 6;
+	if (potionToSpawn == 0) {
+		BoostATK *potion = new BoostATK(newLoc, *whichCell);
+		whichCell->setItem(potion);
+		return potion;
+	}
+	else if (potionToSpawn == 1) {
+		WoundATK *potion = new WoundATK(newLoc, *whichCell);
+		whichCell->setItem(potion);
+		return potion;
+	}
+	else if (potionToSpawn == 2) {
+		BoostDEF *potion = new BoostDEF(newLoc, *whichCell);
+		whichCell->setItem(potion);
+		return potion;
+	}
+	else if (potionToSpawn == 3) {
+		WoundDEF *potion = new WoundDEF(newLoc, *whichCell);
+		whichCell->setItem(potion);
+		return potion;
+	}
+	else if (potionToSpawn == 4) {
+		PoisonHealth *potion = new PoisonHealth(newLoc, *whichCell);
+		whichCell->setItem(potion);
+		return potion;
+	}
+	else {
+		RestoreHealth *potion = new RestoreHealth(newLoc, *whichCell);
+		whichCell->setItem(potion);
+		return potion;
+	}
+}
+
+Item *Chamber::genGoldLoc() {
+	Coordinate &newLoc = genLoc('.');
+	Cell *whichCell = getCellAt(newLoc);
+	int goldToSpawn = rand % 8;
+	if (goldToSpawn <= 4) {
+		Normal *gold = new Normal(newLoc, *whichCell);
+		whichCell->setItem(gold);
+		return gold;
+	}
+	else if (goldToSpawn <= 6) {
+		Small *gold = new Small(newLoc, *whichCell);
+		whichCell->setItem(gold);
+		return gold;
+	}
+	else {
+		DragonHoard *gold = new DragonHoard(newLoc, *whichCell);
+		for (auto i : whichCell->getNeighbours()) {
+			if (!i->isOccupied()) {
+				Dragon *guard = new Dragon(newLoc, whichCell, gold);
+				i->setCharacter(guard);
+				break;
+			}
+		}
+		whichCell->setItem(gold);
+		return gold;
+	}
+}
+
+Character *Chamber::genMonsterLoc() {
+	Coordinate &newLoc = genLoc('.');
+	Cell *whichCell = getCellAt(newLoc);
+	int enemyToSpawn = rand % 18;
+	if (enemyToSpawn <= 3) {
+		Human *enemy = new Human(newLoc, *whichCell);
+		whichCell->setCharacter(enemy);
+		return enemy;
+	}
+	else if (enemyToSpawn <= 6) {
+		Dwarf *enemy = new Dwarf(newLoc, *whichCell);
+		whichCell->setCharacter(enemy);
+		return enemy;
+	}
+	else if (enemyToSpawn <= 11) {
+		Halfling *enemy = new Halfling(newLoc, *whichCell);
+		whichCell->setCharacter(enemy);
+		return enemy;
+	}
+	else if (enemyToSpawn <= 13) {
+		Elf *enemy = new Elf(newLoc, *whichCell);
+		whichCell->setCharacter(enemy);
+		return enemy;
+	}
+	else if (enemyToSpawn <= 15) {
+		Orc *enemy = new Orc(newLoc, *whichCell);
+		whichCell->setCharacter(enemy);
+		return enemy;
+	}
+	else {
+		Merchant *enemy = new Merchant(newLoc, *whichCell);
+		whichCell->setCharacter(enemy);
+		return enemy;
+	}
+}
+
+Cell *Chamber::genPlayerLoc() {
+	Coordinate tmp = genLoc('.');
+	for (auto i : cells) {
+		if (i->getPos() == tmp) {
+			return i;
+		}
+	}
+	return nullptr;
+}
+
+Coordinate Chamber::genStairLoc() {
+	return genLoc('/');
+}
+
+Cell *Chamber::getCellAt(Coordinate *pos) {
+	for (auto cell : cells) {
+		if (cell->getPos() == pos) {
+			return cell;
+		}
+	}
+	return nullptr;
+}
+
+bool Chamber::InChamber(Coordinate coord) {
+
+}
+
+void Chamber::deleteItem(Item *which) {
+
+}
+
+bool Chamber::ValidMove(Coordinate coord) {
+
+	Cell *candCell = nullptr;
+	for (auto cell : cells) {
+		//cout<<"asdfasdfasdf"<<endl;
+		if (cell->getPos() == coord) {
+			candCell = cell;
+		}
+	}
+	/*
+	bool test = cells.end() == find_if(cells.begin(), cells.end(),
+	[&coord](Cell *inCell)
+	{return inCell->getPos().X == coord.X && inCell->getPos().Y == coord.Y; });
+	*/
+
+	if (candCell) {
+		return !(candCell->isOccupied());
+	}
+
+	else {
+		return false;
+	}
+
+}
+
+bool Chamber::moveEnemies() {
+	return true;
+}
+
+void Chamber::react(PlayerRace *player) {
+	for (auto i : enemies) {
+		//	i->react(player);
+	}
+}
+
+void Chamber::notifyItem(Coordinate &nextPos, PlayerRace *player) {
+
+}
+
+void Chamber::notifyItems() {
+
+}
+
+void Chamber::setOccupy(Coordinate pos, bool toWhat) {
+	for (auto i : cells) {
+		if (i->getPos() == pos) {
+			//i->setOccupy(toWhat);
+			return;
+		}
+	}
+}
+
+void Chamber::bloom() {
+	for (auto i : cells) {
+		i->setChar('b');
+		myTd->notify(*i);
+	}
+	cout << "size: " << cells.size() << endl;
+}
+
+void Chamber::printChamber() {
+
+}
+
 void Chamber::readEntities(std::vector<std::string> plan){
 	/*
 	for(int i = 0; i < plan.size(); ++i){
@@ -96,129 +304,27 @@ void Chamber::readEntities(std::vector<std::string> plan){
 	}
 	*/
 }
+
+
+
+
+
+
+
+
+
 /*
-void Chamber::printChamber(){
-	;
+bool dragonPileChar(char test){
+return test == '9';
 }
-*/
+bool enemyChar(char test){
+return test == 'H' || test == 'W' || test == 'E' || test == 'O' || test == 'M' || test == 'L';
+}
+bool itemChar(char test){
 
-Coordinate Chamber::genLoc(char whatChar){
-	bool occupied = true;
-	
-	while(occupied){
-		int whichLoc = rand() % cells.size();
-		Coordinate candidateLoc = cells.at(whichLoc)->getPos();
-		occupied = cells.at(whichLoc)->isOccupiedEnemy();
-		
-		
-		if(!occupied){
-			//cells.at(whichLoc)->setOccupy(true);
-			cells.at(whichLoc)->setChar(whatChar);
-			return cells.at(whichLoc)->getPos();
-		}
-	}
-}
-Coordinate Chamber::genNextFloorLoc(){
-	return genLoc('/');
-	
+for(char a = '0' ; a <= '8' ; ++a){
+if(test == a) return true;
 }
 
-Cell *Chamber::genPlayerLoc(){
-	
-	
-	Coordinate tmp = genLoc('.');
-	
-	for(auto i : cells){
-		if(i->getPos() == tmp){
-			return i;
-		}
-	}
-	
-	//should not be possible
-	return nullptr;
-}
-
-Cell *Chamber::getCellAt(Coordinate pos){
-	for(auto cell : cells){
-		if(cell->getPos() == pos){
-			return cell;
-		}
-	}
-	return nullptr;
-}
-
-Character *Chamber::genMonsterLoc(){
-	Coordinate newLoc = genLoc('.');
-	Cell *whichCell = getCellAt(newLoc);
-	Human *newH = new Human(newLoc, *whichCell);
-	
-	whichCell->setCharacterHere(newH);
-	
-	return newH;
-	//for now, will have a factory later
-//	enemies.emplace_back(new Human(newLoc, Cell{myTd, 'H', newLoc} ));
-	
-}
-
-Item *Chamber::genPotionLoc(){
-	
-	Coordinate newLoc = genLoc('.');
-	Cell *whichCell = getCellAt(newLoc);
-	BoostATK *newBATK = new BoostATK(newLoc, *whichCell);
-	
-	whichCell->setItemHere(newBATK);
-	
-	return newBATK;
-	
-}
-
-Item *Chamber::genGoldLoc(){
-	Coordinate newLoc = genLoc('.');
-	Cell *whichCell = getCellAt(newLoc);
-	Normal *newNormal = new Normal(newLoc, *whichCell);
-	
-	whichCell->setItemHere(newNormal);
-	return newNormal;
-	
-}
-
-
-bool Chamber::ValidMove(Coordinate coord){
-	
-	Cell *candCell = nullptr;
-	for(auto cell : cells){
-		//cout<<"asdfasdfasdf"<<endl;
-		if(cell->getPos() == coord){
-			candCell = cell;
-		}
-	}
-	
-	bool test = cells.end() == find_if(cells.begin(), cells.end(), 
-		[&coord](Cell *inCell)
-			{return inCell->getPos().X == coord.X && inCell->getPos().Y == coord.Y; });
-	
-	
-	if(candCell) {
-		return !(candCell->isOccupiedEnemy());
-	}
-	
-	else {
-		return false;
-	}
-	
-}
-
-void Chamber::bloom(){
-	for(auto i : cells){
-		i->setChar('b');
-		myTd->notify(*i);
-	}
-	cout<<"size: "<<cells.size()<<endl;
-}
-
-void Chamber::printChamber(){
-	for(auto cell: cells){
-		cout<<cell->getPos().X<<" "<<cell->getPos().Y;
-	}
-	cout<<endl;
-}
+return false;
+}*/

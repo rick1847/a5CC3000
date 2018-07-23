@@ -5,11 +5,13 @@ Item::Item(Coordinate &p, Cell &c) : position(&p), cell(&c)
 {}
 
 Item::~Item(){
-	delete position;
-	delete cell;
 }
 
 void Item::myEffect(PlayerRace &pl) {
+	(void)pl;
+}
+
+void Item::myEffect(Character &c) {
 	(void)pl;
 }
 
@@ -22,5 +24,9 @@ char Item::getAvatar() {
 }
 
 Coordinate Item::getPos(){
-	return *position;
+	return position;
+}
+
+void Item::disappear() {
+	cell->removeItem();
 }
