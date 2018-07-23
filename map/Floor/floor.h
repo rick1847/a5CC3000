@@ -45,17 +45,11 @@ class Floor{
 	
 	Floor(std::vector<std::string> plan, TextDisplay *td, bool whatGen);
 	
-	void react(PlayerRace *player);
-	void notifyItem(Coordinate nextPos, PlayerRace *player);
 	void print();
 	//void notify(Subject &whoFrom) override;
 	void genFloor();
 	void moveEnemies();
-	void deleteEnemy(EnemyRace *which);
-	void deleteItem(Item *which);
-	void NotifyCell(Coordinate coord);
-	void NotifyGold(Coordinate coord);
-	void NotifyItems();
+	void reactEnemies(Character *character);
 	bool ValidMove(Coordinate coord);
 	
 	void printChamber(int i);

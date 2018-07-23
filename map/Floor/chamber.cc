@@ -40,21 +40,6 @@ Chamber::Chamber(TextDisplay *td, vector<Coordinate*> &reqCells, const vector<Ce
 	}
 }
 
-/*
-bool dragonPileChar(char test){
-	return test == '9';
-}
-bool enemyChar(char test){
-	return test == 'H' || test == 'W' || test == 'E' || test == 'O' || test == 'M' || test == 'L'; 
-}
-bool itemChar(char test){
-	
-	for(char a = '0' ; a <= '8' ; ++a){
-		if(test == a) return true;
-	}
-	
-	return false;
-}*/
 void Chamber::readEntities(std::vector<std::string> plan){
 	/*
 	for(int i = 0; i < plan.size(); ++i){
@@ -111,11 +96,11 @@ void Chamber::readEntities(std::vector<std::string> plan){
 	}
 	*/
 }
-
+/*
 void Chamber::printChamber(){
 	;
 }
-
+*/
 
 Coordinate Chamber::genLoc(char whatChar){
 	bool occupied = true;
@@ -132,7 +117,6 @@ Coordinate Chamber::genLoc(char whatChar){
 			return cells.at(whichLoc)->getPos();
 		}
 	}
-	
 }
 Coordinate Chamber::genNextFloorLoc(){
 	return genLoc('/');
@@ -198,17 +182,6 @@ Item *Chamber::genGoldLoc(){
 	
 }
 
-void Chamber::genChamber(){
-	
-}
-
-bool Chamber::InChamber(Coordinate coord){
-	
-}
-
-void Chamber::deleteItem(Item *which){
-	
-}
 
 bool Chamber::ValidMove(Coordinate coord){
 	
@@ -219,11 +192,11 @@ bool Chamber::ValidMove(Coordinate coord){
 			candCell = cell;
 		}
 	}
-	/*
+	
 	bool test = cells.end() == find_if(cells.begin(), cells.end(), 
 		[&coord](Cell *inCell)
 			{return inCell->getPos().X == coord.X && inCell->getPos().Y == coord.Y; });
-	*/
+	
 	
 	if(candCell) {
 		return !(candCell->isOccupiedEnemy());
@@ -235,34 +208,17 @@ bool Chamber::ValidMove(Coordinate coord){
 	
 }
 
-void Chamber::setOccupy(Coordinate pos, bool toWhat){
-	for(auto i : cells){
-		if(i->getPos() == pos){ 
-			//i->setOccupy(toWhat);
-			return;
-		}
-	}
-}
-void Chamber::react(PlayerRace *player){
-	for(auto i : enemies){
-	//	i->react(player);
-	}
-}
-bool Chamber::moveEnemies(){
-	return true;
-	
-}
-
-void Chamber::notifyItems(){
-	
-	
-	
-}
-
 void Chamber::bloom(){
 	for(auto i : cells){
 		i->setChar('b');
 		myTd->notify(*i);
 	}
 	cout<<"size: "<<cells.size()<<endl;
+}
+
+void Chamber::printChamber(){
+	for(auto cell: cells){
+		cout<<cell->getPos().X<<" "<<cell->getPos().Y;
+	}
+	cout<<endl;
 }

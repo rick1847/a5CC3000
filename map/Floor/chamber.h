@@ -24,8 +24,6 @@ class Chamber{
 	bool randGen;
 	
 	std::vector<Cell*> cells;
-	std::vector<Item*> items;
-	std::vector<EnemyRace*> enemies;
 	
 	TextDisplay *myTd;
 
@@ -40,24 +38,16 @@ class Chamber{
 	Cell *getCellAt(Coordinate pos);
 	Chamber(TextDisplay *td, std::vector<Coordinate*> &reqCells, const std::vector<Cell*> &theCells);
 	
-	void genChamber();
 	Cell *genPlayerLoc();
 	Coordinate genNextFloorLoc();
-	
-	bool InChamber(Coordinate coord);
-	void deleteItem(Item *which);
 	
 	bool ValidMove(Coordinate coord);
 	
 	void react(PlayerRace *player);
-	void notifyItem(Coordinate nextPos, PlayerRace *player);
-	bool moveEnemies();
 	
-	void setOccupy(Coordinate pos, bool toWhat);
 	
 	void bloom();
 	void printChamber();
-	void notifyItems();
 	void readEntities(std::vector<std::string> plan);
 
 };

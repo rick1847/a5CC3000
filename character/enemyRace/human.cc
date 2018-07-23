@@ -11,3 +11,19 @@ void Human::specialEffect(Character &to) {
 char Human::getAvatar() {
 	return 'H';
 }
+
+#include<iostream>
+using namespace std;
+
+void Human::attack(Character &who) {
+	cout<<"I work"<<endl;
+	who.printStats();
+	who.takeHit(*this);
+}
+
+void Human::takeHit(Character &from) {
+	int dmg = ceil(100 / (100 + stats->getDEF()) * from.getStats().getATK());
+	stats->addHP(-1 * dmg);
+	
+	printStats();
+}

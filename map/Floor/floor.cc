@@ -206,34 +206,18 @@ void Floor::genFloor(){
 
 
 
-void Floor::deleteEnemy(EnemyRace *which){
-	
-}
 
-void Floor::deleteItem(Item *which){
-	
-}
-
-void Floor::NotifyCell(Coordinate coord){
-	
-}
-
-void Floor::NotifyGold(Coordinate coord){
-	//for(auto i : chambers){
-	//	i->notifyItems();
-	//}
-}
-
-void Floor::react(PlayerRace *player){
-	//for(auto i : chambers){
-	//	i->react(player);
-	//}
-}
-
-void Floor::notifyItem(Coordinate nextPos, PlayerRace *player){
-	//for(auto i : chambers){
-	//	i->notifyItem(nextPos, player);
-	//}
+#include <iostream>
+using namespace std;
+void Floor::reactEnemies(Character *character){
+	for(auto i : enemies){
+		if(oneTileAway(character->getPos(), i->getPos())){
+			//cout<<"huafdsbsadf"<<endl;
+			i->attack(*character);
+		}
+		//i->attack(*character);
+		
+	}
 }
 
 void Floor::moveEnemies(){
@@ -244,12 +228,8 @@ void Floor::moveEnemies(){
 		i->move();
 	}
 }
-void Floor::NotifyItems(){
-	//for(auto i : chambers){
-	//	i->notifyItems();
-	//}
-}
 
+/*
 bool Floor::ValidMove(Coordinate coord){
 	for(auto i : cells){
 		if(i->getPos() == coord){
@@ -273,7 +253,7 @@ bool Floor::ValidMove(Coordinate coord){
 	
 	return false;
 }
-
+*/
 
 void Floor::bloom(){
 	for(auto i : chambers){

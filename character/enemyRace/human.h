@@ -9,6 +9,9 @@ public:
 	//drop a second gold pile on death
 	void specialEffect(Character &to) override;
 	char getAvatar() override;
+
+	void attack(Character &who) override;
+	void takeHit(Character &from) override;
 };
 
 

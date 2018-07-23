@@ -11,6 +11,7 @@
 class Item;
 class Character;
 class Treasure;
+class PlayerRace;
 class TextDisplay;
 
 enum class CellType{HorizontalWall, VerticalWall, Tile, Doorway, Passage, Empty};
@@ -57,12 +58,6 @@ class Cell{
 	
 	void addNeighbour(Cell *neighbour);
 	
-	void deleteChar(Character *character); 
-	void deleteItem(Item *item);
-	
-	void notify(Subject &fromWho);
-	void notify(Treasure &fromWho);
-	
 	void setChar(char a);
 
 	void alertDisplayOfChange();
@@ -71,9 +66,11 @@ class Cell{
 	
 	void send();
 	void receive(Cell *neighbour);
+	//void notifyEnemies();
 
 	void send(std::string dir);
 	bool receive(Character *myChar);
+	//void attackPlayer(Character *player);
 
 	void bloom();
 	

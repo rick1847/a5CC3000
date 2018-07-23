@@ -3,6 +3,7 @@
 #include "../../character/character.h"
 #include "../../item/item.h"
 
+#include <iostream>
 using namespace std;
 Cell::Cell(TextDisplay *display, char type, Coordinate coord):position{coord},td{display}{
 	
@@ -15,26 +16,13 @@ void Cell::addNeighbour(Cell *neighbour){
 }
 
 bool Cell::isOccupiedEnemy(){
-	return itemHere || characterHere || treasureHere;
+	return itemHere || characterHere || dispChar == '/';
 }
 
 bool Cell::isOccupiedPlayer(){
 	return itemHere || characterHere;
 }
 
-/*
-Coordinates Cell::getPos(){
-	return position;
-}
-*/
-
-void Cell::deleteChar(Character *character){
-	
-}
-
-void Cell::deleteItem(Item *item){
-	
-}
 
 void Cell::setItemHere(Item *item){
 	itemHere = item;
@@ -49,15 +37,6 @@ Character *Cell::getCharacterHere(){
 	return characterHere;
 }
 
-void Cell::notify(Subject &fromWho){
-	if(dispChar != '.'){
-	//	notifyObservers();
-	}
-	//if(dispChar != 'b'){
-	//	dispChar = 'b';
-	//	notifyObservers();
-	//}
-}
 
 void Cell::setChar(char a){
 	dispChar = a;
@@ -115,10 +94,10 @@ bool inDir(string dir, Cell *cell1, Cell *cell2){
 		return isNorth(pos1, pos2) && (!isEast(pos1, pos2));
 	}
 	else if(dir == "se"){
-		return (!isNorth(pos1, pos2)) && isEast(pos1, pos2);
+		return (!isNorth(pos1, pos2) && (!sameNorthNess(pos1, pos2))) && isEast(pos1, pos2);
 	}
 	else if(dir == "sw"){
-		return (!isNorth(pos1, pos2)) && (!isEast(pos1, pos2));
+		return (!isNorth(pos1, pos2) && (!sameNorthNess(pos1, pos2))) && (!isEast(pos1, pos2));
 	}
 	else{
 		return false;
@@ -140,17 +119,10 @@ void Cell::send(string dir){
 				characterHere = nullptr;
 			}
 			//characterHere = nullptr;
-			std::cout<<changed<<std::endl;
+			//std::cout<<changed<<std::endl;
 			return;
 		}
 		
-		//if we can get position
-		/*
-		changed = cell->receive(characterHere);
-		if(changed){
-			characterHere = nullptr;
-			return;
-		}*/
 	}
 }
 
@@ -172,18 +144,11 @@ void Cell::receive(Cell *neighbour){
 }
 
 bool Cell::receive(Character *myChar){
-	//if we can get position
-	/*if(myChar->getPos() == position){
+	
+	if(!isOccupiedEnemy()){
 		characterHere = myChar;
 		characterHere->changeCell(this);
-		return true;
-	}*/
-	
-	
-	//empty cell means place
-	if(!characterHere && !itemHere){
-		characterHere = myChar;
-		characterHere->changeCell(this);
+		
 		
 		return true;
 	}
@@ -214,3 +179,4 @@ void Cell::alertDisplayOfChange(){
 		dispChar = tmp;
 	}
 }
+
