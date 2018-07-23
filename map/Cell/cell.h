@@ -57,8 +57,8 @@ class Cell{
 	
 	void addNeighbour(Cell *neighbour);
 	
-	void deleteChar(Character *character); 
-	void deleteItem(Item *item);
+	void killChar(); 
+	void removeItem();
 	
 	void notify(Subject &fromWho);
 	void notify(Treasure &fromWho);
