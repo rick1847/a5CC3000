@@ -58,6 +58,15 @@ class Cell{
 	
 	void addNeighbour(Cell *neighbour);
 	
+<<<<<<< HEAD
+=======
+	void killChar(); 
+	void removeItem();
+	
+	void notify(Subject &fromWho);
+	void notify(Treasure &fromWho);
+	
+>>>>>>> 96165da3ca5b6ae01dea71dc38cbdb1c06efb12f
 	void setChar(char a);
 
 	void alertDisplayOfChange();

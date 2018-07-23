@@ -23,6 +23,24 @@ bool Cell::isOccupiedPlayer(){
 	return itemHere || characterHere;
 }
 
+<<<<<<< HEAD
+=======
+/*
+Coordinates Cell::getPos(){
+	return position;
+}
+*/
+
+void Cell::killChar(Character *character){
+	delete characterHere;
+	characterHere = nullptr;
+}
+
+void Cell::removeItem(Item *item){
+	delete itemHere;
+	itemHere = nullptr;
+}
+>>>>>>> 96165da3ca5b6ae01dea71dc38cbdb1c06efb12f
 
 void Cell::setItemHere(Item *item){
 	itemHere = item;
