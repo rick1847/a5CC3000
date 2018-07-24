@@ -22,3 +22,9 @@ void Merchant::takeHit(Character &from) {
 char Merchant::getAvatar() {
 	return 'M';
 }
+
+void Merchant::die() {
+	MerchHoard *drop = new MerchHoard(*position, *cell);
+	cell->setItem(drop);
+	cell->killCharacter();
+}
