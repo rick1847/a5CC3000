@@ -4,7 +4,7 @@ Orc::Orc(Coordinate &p, Cell &c) : EnemyRace(*(new Stats(180, 180, 30, 25)), *(n
 {}
 
 void Orc::specialEffect(Goblin &to) {
-	int half_dmg = ceil(100 / (100 + getStats().getDEF()) * to.getStats().getATK());
+	int half_dmg = ceil(100.0 / (100.0 + (double)getStats().getDEF()) * (double)to.getStats().getATK()) / 2.0;
 	to.getStats().addHP(-half_dmg);
 }
 
