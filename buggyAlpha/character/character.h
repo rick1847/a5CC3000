@@ -48,10 +48,7 @@ public:
 	void changeStats(Stats &newS);
 
 	void changeCell(Cell *whatCell);
-	
-	//NOT IMPELEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
 	virtual void die();
-	//NOT IMPLEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
 	virtual void move();
 	
 	Coordinate getPos();
