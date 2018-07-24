@@ -98,11 +98,19 @@ void Character::changeStats(Stats &newS) {
 void Character::changeCell(Cell *whatCell){
 	cell = whatCell;
 }
-//NOT IMPELEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
+
 void Character::die(){
-	
+	int whichDrop = rand() % 2;
+	if (whichDrop == 0) {
+		Small *drop = new Small(*position, *cell);
+		cell->setItem(drop);
+		cell->killCharacter();
+	} else {
+		Normal *drop = new Normal(*position, *cell);
+		cell->setItem(drop);
+		cell->killCharacter();
+	}
 }
-	//NOT IMPLEMENTED YET, MUST BE OVERRIDDEN FOR EACH CONCRETE CLASS
 
 void Character::move(){
 
