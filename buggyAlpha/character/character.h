@@ -5,8 +5,6 @@
 #include "../map/Cell/cell.h"
 #include "../item/gold/small.h"
 #include "../item/gold/normal.h"
-#include "../item/gold/mhoard.h"
-#include "../item/gold/dhoard.h"
 #include <math.h>
 
 class Vampire;
