@@ -13,5 +13,6 @@ char Orc::getAvatar() {
 }
 
 void Orc::attack(Character &who){
-	
+	who.takeHit(*this);
+	specialEffect(who);
 }
